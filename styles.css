@@ -1,0 +1,1002 @@
+/* ==========================================================================
+   styles.css — Python Basics Workshop
+   ==========================================================================
+   Table of Contents:
+   1. Design Tokens (CSS Variables)
+   2. Reset & Base Typography
+   3. Layout (Header, Main Grid, Panels)
+   4. Tabs
+   5. Progress Bars
+   6. Learn Tab (Pills, Lesson Cards, Callouts)
+   7. Code Blocks & Syntax Highlighting
+   8. Challenges Tab (Tiers, Cards, Active View)
+   9. Reference Tab (Grid, Tables)
+   10. Cheat Sheet Tab
+   11. Playground (Editor, Output, Buttons)
+   12. Mascot (Strip, Moments, Coach, Idle)
+   13. Utilities (Reset Button, Engine Badge)
+   14. Responsive Breakpoints
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* Brand */
+  --accent:          #f7a72c;
+  --accent-hover:    #e69520;
+  --accent-subtle:   rgba(247, 167, 44, 0.08);
+  --accent-border:   rgba(247, 167, 44, 0.20);
+
+  /* Semantic */
+  --teal:            #2197A9;
+  --teal-subtle:     rgba(33, 151, 169, 0.08);
+  --green:           #2E7D32;
+  --green-subtle:    rgba(46, 125, 50, 0.08);
+  --berry:           #8D2048;
+  --berry-subtle:    rgba(141, 32, 72, 0.08);
+  --red:             #d32f2f;
+  --red-subtle:      rgba(211, 47, 47, 0.08);
+
+  /* Surfaces */
+  --bg:              #0f1117;
+  --bg-card:         #171923;
+  --bg-elevated:     #1e2030;
+  --bg-hover:        #252840;
+  --bg-code:         #0c0e14;
+
+  /* Text */
+  --text-primary:    #e2e4ea;
+  --text-secondary:  #9ea2b0;
+  --text-muted:      #6b7080;
+
+  /* Borders */
+  --border:          #2a2d3e;
+  --border-light:    #353850;
+
+  /* Syntax highlighting */
+  --syn-keyword:     #c678dd;
+  --syn-string:      #98c379;
+  --syn-number:      #d19a66;
+  --syn-comment:     #5c6370;
+  --syn-builtin:     #e5c07b;
+
+  /* Layout */
+  --font-body:       'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-code:       'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --radius-sm:       4px;
+  --radius-md:       8px;
+  --radius-lg:       12px;
+  --radius-pill:     100px;
+}
+
+
+/* ==========================================================================
+   2. RESET & BASE TYPOGRAPHY
+   ========================================================================== */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+code {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+}
+
+
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 24px;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--accent);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--bg);
+}
+.logo-text { font-size: 14px; color: var(--text-secondary); }
+.logo-title { font-weight: 700; color: var(--text-primary); font-size: 16px; }
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  height: calc(100vh - 58px);
+}
+
+
+/* ==========================================================================
+   4. TABS
+   ========================================================================== */
+
+.tab-group {
+  display: flex;
+  gap: 4px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+.tab-btn.active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+
+/* ==========================================================================
+   5. PROGRESS BARS
+   ========================================================================== */
+
+.learn-progress,
+.challenge-progress {
+  margin-bottom: 16px;
+}
+.progress-bar-bg {
+  height: 6px;
+  background: var(--bg-elevated);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+/* ==========================================================================
+   6. LEARN TAB
+   ========================================================================== */
+
+/* ── Content panel ────────────────────────────────────────────── */
+
+.content-panel {
+  overflow-y: auto;
+  padding: 24px;
+  border-right: 1px solid var(--border);
+}
+
+/* ── Lesson pills ─────────────────────────────────────────────── */
+
+.lesson-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.pill {
+  width: 38px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pill:hover { border-color: var(--accent); color: var(--text-primary); }
+.pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.pill.visited { border-color: var(--accent-border); color: var(--accent); }
+
+/* ── Lesson card ──────────────────────────────────────────────── */
+
+.lesson-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.lesson-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.lesson-number {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.lesson-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 4px 0 8px;
+  color: var(--text-primary);
+}
+.lesson-connection {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.lesson-body {
+  padding: 24px;
+}
+.lesson-text {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.lesson-text strong { color: var(--text-primary); }
+.lesson-text code {
+  background: var(--bg-elevated);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: 0.88em;
+}
+
+/* ── Callouts ─────────────────────────────────────────────────── */
+
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  border: 1px solid;
+}
+
+.callout-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.callout-text {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.callout-text code {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+  background: rgba(0,0,0,0.25);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.callout-concept {
+  background: var(--accent-subtle);
+  border-color: var(--accent-border);
+}
+.callout-concept .callout-label { color: var(--accent); }
+.callout-concept .callout-text  { color: var(--text-secondary); }
+.callout-concept .callout-text code { color: var(--accent); }
+
+.callout-try {
+  background: var(--green-subtle);
+  border-color: rgba(46, 125, 50, 0.20);
+}
+.callout-try .callout-label { color: var(--green); }
+.callout-try .callout-text  { color: var(--text-secondary); }
+.callout-try .callout-text code { color: var(--green); }
+
+.callout-warning {
+  background: var(--red-subtle);
+  border-color: rgba(211, 47, 47, 0.20);
+}
+.callout-warning .callout-label { color: var(--red); }
+.callout-warning .callout-text  { color: var(--text-secondary); }
+.callout-warning .callout-text code { color: var(--red); }
+
+/* ── Lesson navigation ────────────────────────────────────────── */
+
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.nav-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+
+/* ==========================================================================
+   7. CODE BLOCKS & SYNTAX
+   ========================================================================== */
+
+.code-block {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.code-run-btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 4px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.code-run-btn:hover { background: var(--accent-hover); }
+
+.code-content {
+  padding: 16px;
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.code-output {
+  padding: 10px 16px;
+  border-top: 1px dashed var(--border);
+  background: rgba(46, 125, 50, 0.04);
+}
+.code-output-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.code-output pre {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--green);
+  white-space: pre-wrap;
+}
+
+
+/* ==========================================================================
+   8. CHALLENGES TAB
+   ========================================================================== */
+
+/* ── Tier filter ──────────────────────────────────────────────── */
+
+.tier-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.tier-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.tier-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+.tier-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+/* ── Challenge cards ──────────────────────────────────────────── */
+
+.challenge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.challenge-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  width: 100%;
+  font-family: var(--font-body);
+}
+.challenge-card:hover { border-color: var(--accent); }
+.challenge-card.completed { border-color: var(--green); }
+
+.challenge-tier-icon { font-size: 18px; flex-shrink: 0; }
+.challenge-info { flex: 1; }
+.challenge-title { font-size: 14px; font-weight: 600; color: var(--text-primary); display: block; }
+.challenge-topic { font-size: 12px; color: var(--text-muted); }
+.challenge-check { color: var(--green); font-weight: 700; font-size: 16px; }
+
+/* ── Active challenge ─────────────────────────────────────────── */
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  padding: 0;
+}
+.back-btn:hover { color: var(--accent); }
+
+.active-challenge {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+.active-tier {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 10px;
+}
+.active-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.active-question {
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.answer-section { margin-top: 16px; }
+.answer-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.answer-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: 14px;
+  width: 60%;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.answer-input:focus { border-color: var(--accent); }
+
+.check-btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.check-btn:hover { background: var(--accent-hover); }
+
+.result-correct { color: var(--green); font-weight: 600; display: block; margin-top: 8px; }
+.result-wrong { color: var(--red); font-weight: 600; display: block; margin-top: 8px; }
+
+.starter-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 12px;
+  display: inline-block;
+}
+.starter-btn:hover { border-color: var(--accent); }
+
+.expected-output {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(46, 125, 50, 0.04);
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  border-radius: var(--radius-md);
+}
+.expected-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.expected-output pre {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--green);
+  white-space: pre-wrap;
+}
+
+.hint-btn {
+  background: none;
+  border: none;
+  color: var(--teal);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 14px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   9. REFERENCE TAB
+   ========================================================================== */
+
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.ref-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ref-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+.ref-icon { font-size: 16px; }
+.ref-title { font-weight: 700; font-size: 14px; color: var(--text-primary); }
+
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ref-table tr { border-bottom: 1px solid var(--border); }
+.ref-table tr:last-child { border-bottom: none; }
+.ref-table td { padding: 8px 14px; font-size: 13px; }
+.ref-code code {
+  font-family: var(--font-code);
+  color: var(--accent);
+  font-size: 12px;
+}
+.ref-desc { color: var(--text-secondary); }
+
+
+/* ==========================================================================
+   10. CHEAT SHEET TAB
+   ========================================================================== */
+
+.cheat-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.cheat-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.cheat-section-title {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.cheat-rows {
+  padding: 4px 0;
+}
+.cheat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.cheat-row:last-child { border-bottom: none; }
+
+.cheat-code {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--accent);
+}
+.cheat-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+
+/* ==========================================================================
+   11. PLAYGROUND
+   ========================================================================== */
+
+.playground-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+}
+
+.playground-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.playground-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.playground-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.pg-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pg-btn-run {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.pg-btn-run:hover { background: var(--accent-hover); }
+.pg-btn-clear {
+  background: transparent;
+  color: var(--text-muted);
+}
+.pg-btn-clear:hover { color: var(--text-primary); border-color: var(--text-muted); }
+
+.code-editor {
+  flex: 1;
+  min-height: 180px;
+  padding: 16px;
+  background: var(--bg-code);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.7;
+  resize: none;
+  outline: none;
+  tab-size: 4;
+}
+.code-editor::placeholder { color: var(--text-muted); }
+
+.output-label {
+  padding: 8px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.output-area {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--text-secondary);
+}
+.output-area.output-success { color: var(--green); }
+
+.output-error {
+  color: var(--red);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.output-truncated {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+
+/* ==========================================================================
+   12. MASCOT
+   ========================================================================== */
+
+.mascot-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--accent-subtle);
+  min-height: 52px;
+}
+.mascot-img {
+  width: 44px;
+  height: auto;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.mascot-img.wiggle {
+  animation: mascotWiggle 0.5s ease;
+}
+@keyframes mascotWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+.mascot-bubble {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 12px 4px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  flex: 1;
+  font-family: var(--font-body);
+}
+.mascot-bubble strong { color: var(--text-primary); font-weight: 600; }
+.mascot-bubble code {
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  background: var(--bg-elevated);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--accent);
+}
+
+/* ── Lesson mascot moment ─────────────────────────────────────── */
+
+.mascot-moment {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 18px 0;
+  padding: 14px 18px;
+  background: var(--accent-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--accent-border);
+}
+.mascot-moment .mascot-img { width: 48px; margin-top: 2px; }
+.mascot-moment .mascot-speech {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.mascot-moment .mascot-speech strong { color: var(--text-primary); }
+.mascot-moment .mascot-speech code {
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  background: rgba(0,0,0,0.25);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--accent);
+}
+
+/* ── Challenge coach ──────────────────────────────────────────── */
+
+.coach-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+.coach-strip .mascot-img { width: 42px; }
+.coach-msg {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+.coach-msg strong { color: var(--accent); }
+
+/* ── Playground idle ──────────────────────────────────────────── */
+
+.playground-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  gap: 10px;
+}
+.playground-idle .mascot-img { width: 56px; opacity: 0.7; }
+.playground-idle .idle-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-body);
+}
+
+
+/* ==========================================================================
+   13. UTILITIES
+   ========================================================================== */
+
+.engine-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+.engine-badge.ready {
+  background: var(--green-subtle);
+  color: var(--green);
+}
+.engine-badge.fallback {
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.reset-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+
+/* ==========================================================================
+   14. RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .main {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .playground-panel {
+    border-left: none;
+    border-top: 2px solid var(--accent);
+    min-height: 400px;
+  }
+  .content-panel {
+    border-right: none;
+    min-height: 50vh;
+  }
+  .header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tab-group {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .content-panel { padding: 16px; }
+  .ref-grid,
+  .cheat-sections { grid-template-columns: 1fr; }
+  .answer-input { width: 100%; }
+  .check-btn { margin-left: 0; margin-top: 8px; display: block; }
+}

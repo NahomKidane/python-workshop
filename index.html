@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Basics Workshop — AI 102</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       HEADER
+       ════════════════════════════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">Py</div>
+      <div>
+        <div class="logo-title">Python Basics Workshop</div>
+        <div class="logo-text">AI 102 — NLP-Based Programming</div>
+      </div>
+    </div>
+
+    <nav class="tab-group">
+      <button class="tab-btn active" data-tab="learn">Learn</button>
+      <button class="tab-btn" data-tab="challenges">Challenges</button>
+      <button class="tab-btn" data-tab="reference">Reference</button>
+      <button class="tab-btn" data-tab="cheatsheet">Cheat Sheet</button>
+    </nav>
+
+    <span class="engine-badge" id="engineBadge">⏳ Loading Python…</span>
+    <button class="reset-btn" id="btnReset">Reset Progress</button>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       MAIN — Two-panel layout
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="main">
+
+    <!-- Content panel (left) — renders Learn / Challenges / Reference / Cheat Sheet -->
+    <div class="content-panel" id="contentPanel"></div>
+
+    <!-- Playground panel (right) — persistent code editor + output -->
+    <div class="playground-panel">
+      <div class="playground-header">
+        <span class="playground-title">🐍 Playground</span>
+        <div class="playground-actions">
+          <button class="pg-btn pg-btn-run" id="btnRun">▶ Run</button>
+          <button class="pg-btn pg-btn-clear" id="btnClear">Clear</button>
+        </div>
+      </div>
+
+      <textarea
+        class="code-editor"
+        id="codeEditor"
+        placeholder="Type Python code here…"
+        spellcheck="false"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+      ></textarea>
+
+      <div class="output-label">Output</div>
+      <div class="output-area" id="outputArea"></div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       SCRIPTS — loaded in dependency order with defer
+       ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- External: Skulpt Python engine (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt-stdlib.js" defer></script>
+
+  <!-- Core utilities (no dependencies) -->
+  <script src="js/utils.js" defer></script>
+  <script src="js/mascot.js" defer></script>
+  <script src="js/state.js" defer></script>
+
+  <!-- Data (no dependencies, pure content arrays) -->
+  <script src="js/data/lessons.js" defer></script>
+  <script src="js/data/challenges.js" defer></script>
+  <script src="js/data/reference.js" defer></script>
+  <script src="js/data/cheatsheet.js" defer></script>
+
+  <!-- Engine + Playground (depend on state, mascot, utils) -->
+  <script src="js/engine.js" defer></script>
+  <script src="js/playground.js" defer></script>
+
+  <!-- Tab renderers (depend on state, utils, mascot, playground, data) -->
+  <script src="js/renderers/learn.js" defer></script>
+  <script src="js/renderers/challenges.js" defer></script>
+  <script src="js/renderers/reference.js" defer></script>
+  <script src="js/renderers/cheatsheet.js" defer></script>
+
+  <!-- Entry point (loads last, wires everything) -->
+  <script src="js/app.js" defer></script>
+
+</body>
+</html>
