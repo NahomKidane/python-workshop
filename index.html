@@ -11,7 +11,1011 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css">
+  <style>
+/* ==========================================================================
+   styles.css — Python Basics Workshop
+   ==========================================================================
+   Table of Contents:
+   1. Design Tokens (CSS Variables)
+   2. Reset & Base Typography
+   3. Layout (Header, Main Grid, Panels)
+   4. Tabs
+   5. Progress Bars
+   6. Learn Tab (Pills, Lesson Cards, Callouts)
+   7. Code Blocks & Syntax Highlighting
+   8. Challenges Tab (Tiers, Cards, Active View)
+   9. Reference Tab (Grid, Tables)
+   10. Cheat Sheet Tab
+   11. Playground (Editor, Output, Buttons)
+   12. Mascot (Strip, Moments, Coach, Idle)
+   13. Utilities (Reset Button, Engine Badge)
+   14. Responsive Breakpoints
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* Brand */
+  --accent:          #f7a72c;
+  --accent-hover:    #e69520;
+  --accent-subtle:   rgba(247, 167, 44, 0.08);
+  --accent-border:   rgba(247, 167, 44, 0.20);
+
+  /* Semantic */
+  --teal:            #2197A9;
+  --teal-subtle:     rgba(33, 151, 169, 0.08);
+  --green:           #2E7D32;
+  --green-subtle:    rgba(46, 125, 50, 0.08);
+  --berry:           #8D2048;
+  --berry-subtle:    rgba(141, 32, 72, 0.08);
+  --red:             #d32f2f;
+  --red-subtle:      rgba(211, 47, 47, 0.08);
+
+  /* Surfaces */
+  --bg:              #0f1117;
+  --bg-card:         #171923;
+  --bg-elevated:     #1e2030;
+  --bg-hover:        #252840;
+  --bg-code:         #0c0e14;
+
+  /* Text */
+  --text-primary:    #e2e4ea;
+  --text-secondary:  #9ea2b0;
+  --text-muted:      #6b7080;
+
+  /* Borders */
+  --border:          #2a2d3e;
+  --border-light:    #353850;
+
+  /* Syntax highlighting */
+  --syn-keyword:     #c678dd;
+  --syn-string:      #98c379;
+  --syn-number:      #d19a66;
+  --syn-comment:     #5c6370;
+  --syn-builtin:     #e5c07b;
+
+  /* Layout */
+  --font-body:       'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-code:       'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --radius-sm:       4px;
+  --radius-md:       8px;
+  --radius-lg:       12px;
+  --radius-pill:     100px;
+}
+
+
+/* ==========================================================================
+   2. RESET & BASE TYPOGRAPHY
+   ========================================================================== */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+code {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+}
+
+
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 24px;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--accent);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--bg);
+}
+.logo-text { font-size: 14px; color: var(--text-secondary); }
+.logo-title { font-weight: 700; color: var(--text-primary); font-size: 16px; }
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  height: calc(100vh - 58px);
+}
+
+
+/* ==========================================================================
+   4. TABS
+   ========================================================================== */
+
+.tab-group {
+  display: flex;
+  gap: 4px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+.tab-btn.active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+
+/* ==========================================================================
+   5. PROGRESS BARS
+   ========================================================================== */
+
+.learn-progress,
+.challenge-progress {
+  margin-bottom: 16px;
+}
+.progress-bar-bg {
+  height: 6px;
+  background: var(--bg-elevated);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+/* ==========================================================================
+   6. LEARN TAB
+   ========================================================================== */
+
+/* ── Content panel ────────────────────────────────────────────── */
+
+.content-panel {
+  overflow-y: auto;
+  padding: 24px;
+  border-right: 1px solid var(--border);
+}
+
+/* ── Lesson pills ─────────────────────────────────────────────── */
+
+.lesson-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.pill {
+  width: 38px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pill:hover { border-color: var(--accent); color: var(--text-primary); }
+.pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.pill.visited { border-color: var(--accent-border); color: var(--accent); }
+
+/* ── Lesson card ──────────────────────────────────────────────── */
+
+.lesson-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.lesson-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.lesson-number {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.lesson-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 4px 0 8px;
+  color: var(--text-primary);
+}
+.lesson-connection {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.lesson-body {
+  padding: 24px;
+}
+.lesson-text {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.lesson-text strong { color: var(--text-primary); }
+.lesson-text code {
+  background: var(--bg-elevated);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: 0.88em;
+}
+
+/* ── Callouts ─────────────────────────────────────────────────── */
+
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  border: 1px solid;
+}
+
+.callout-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.callout-text {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.callout-text code {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+  background: rgba(0,0,0,0.25);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.callout-concept {
+  background: var(--accent-subtle);
+  border-color: var(--accent-border);
+}
+.callout-concept .callout-label { color: var(--accent); }
+.callout-concept .callout-text  { color: var(--text-secondary); }
+.callout-concept .callout-text code { color: var(--accent); }
+
+.callout-try {
+  background: var(--green-subtle);
+  border-color: rgba(46, 125, 50, 0.20);
+}
+.callout-try .callout-label { color: var(--green); }
+.callout-try .callout-text  { color: var(--text-secondary); }
+.callout-try .callout-text code { color: var(--green); }
+
+.callout-warning {
+  background: var(--red-subtle);
+  border-color: rgba(211, 47, 47, 0.20);
+}
+.callout-warning .callout-label { color: var(--red); }
+.callout-warning .callout-text  { color: var(--text-secondary); }
+.callout-warning .callout-text code { color: var(--red); }
+
+/* ── Lesson navigation ────────────────────────────────────────── */
+
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.nav-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+
+/* ==========================================================================
+   7. CODE BLOCKS & SYNTAX
+   ========================================================================== */
+
+.code-block {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.code-run-btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 4px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.code-run-btn:hover { background: var(--accent-hover); }
+
+.code-content {
+  padding: 16px;
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.code-output {
+  padding: 10px 16px;
+  border-top: 1px dashed var(--border);
+  background: rgba(46, 125, 50, 0.04);
+}
+.code-output-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.code-output pre {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--green);
+  white-space: pre-wrap;
+}
+
+
+/* ==========================================================================
+   8. CHALLENGES TAB
+   ========================================================================== */
+
+/* ── Tier filter ──────────────────────────────────────────────── */
+
+.tier-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.tier-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.tier-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+.tier-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+/* ── Challenge cards ──────────────────────────────────────────── */
+
+.challenge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.challenge-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  width: 100%;
+  font-family: var(--font-body);
+}
+.challenge-card:hover { border-color: var(--accent); }
+.challenge-card.completed { border-color: var(--green); }
+
+.challenge-tier-icon { font-size: 18px; flex-shrink: 0; }
+.challenge-info { flex: 1; }
+.challenge-title { font-size: 14px; font-weight: 600; color: var(--text-primary); display: block; }
+.challenge-topic { font-size: 12px; color: var(--text-muted); }
+.challenge-check { color: var(--green); font-weight: 700; font-size: 16px; }
+
+/* ── Active challenge ─────────────────────────────────────────── */
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  padding: 0;
+}
+.back-btn:hover { color: var(--accent); }
+
+.active-challenge {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+.active-tier {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 10px;
+}
+.active-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.active-question {
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.answer-section { margin-top: 16px; }
+.answer-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.answer-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: 14px;
+  width: 60%;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.answer-input:focus { border-color: var(--accent); }
+
+.check-btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.check-btn:hover { background: var(--accent-hover); }
+
+.result-correct { color: var(--green); font-weight: 600; display: block; margin-top: 8px; }
+.result-wrong { color: var(--red); font-weight: 600; display: block; margin-top: 8px; }
+
+.starter-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 12px;
+  display: inline-block;
+}
+.starter-btn:hover { border-color: var(--accent); }
+
+.expected-output {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(46, 125, 50, 0.04);
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  border-radius: var(--radius-md);
+}
+.expected-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.expected-output pre {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--green);
+  white-space: pre-wrap;
+}
+
+.hint-btn {
+  background: none;
+  border: none;
+  color: var(--teal);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 14px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   9. REFERENCE TAB
+   ========================================================================== */
+
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.ref-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ref-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+.ref-icon { font-size: 16px; }
+.ref-title { font-weight: 700; font-size: 14px; color: var(--text-primary); }
+
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ref-table tr { border-bottom: 1px solid var(--border); }
+.ref-table tr:last-child { border-bottom: none; }
+.ref-table td { padding: 8px 14px; font-size: 13px; }
+.ref-code code {
+  font-family: var(--font-code);
+  color: var(--accent);
+  font-size: 12px;
+}
+.ref-desc { color: var(--text-secondary); }
+
+
+/* ==========================================================================
+   10. CHEAT SHEET TAB
+   ========================================================================== */
+
+.cheat-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.cheat-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.cheat-section-title {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.cheat-rows {
+  padding: 4px 0;
+}
+.cheat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.cheat-row:last-child { border-bottom: none; }
+
+.cheat-code {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--accent);
+}
+.cheat-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+
+/* ==========================================================================
+   11. PLAYGROUND
+   ========================================================================== */
+
+.playground-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+}
+
+.playground-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.playground-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.playground-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.pg-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pg-btn-run {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.pg-btn-run:hover { background: var(--accent-hover); }
+.pg-btn-clear {
+  background: transparent;
+  color: var(--text-muted);
+}
+.pg-btn-clear:hover { color: var(--text-primary); border-color: var(--text-muted); }
+
+.code-editor {
+  flex: 1;
+  min-height: 180px;
+  padding: 16px;
+  background: var(--bg-code);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.7;
+  resize: none;
+  outline: none;
+  tab-size: 4;
+}
+.code-editor::placeholder { color: var(--text-muted); }
+
+.output-label {
+  padding: 8px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.output-area {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--text-secondary);
+}
+.output-area.output-success { color: var(--green); }
+
+.output-error {
+  color: var(--red);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.output-truncated {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+
+/* ==========================================================================
+   12. MASCOT
+   ========================================================================== */
+
+.mascot-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--accent-subtle);
+  min-height: 52px;
+}
+.mascot-img {
+  width: 44px;
+  height: auto;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.mascot-img.wiggle {
+  animation: mascotWiggle 0.5s ease;
+}
+@keyframes mascotWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+.mascot-bubble {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 12px 4px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  flex: 1;
+  font-family: var(--font-body);
+}
+.mascot-bubble strong { color: var(--text-primary); font-weight: 600; }
+.mascot-bubble code {
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  background: var(--bg-elevated);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--accent);
+}
+
+/* ── Lesson mascot moment ─────────────────────────────────────── */
+
+.mascot-moment {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 18px 0;
+  padding: 14px 18px;
+  background: var(--accent-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--accent-border);
+}
+.mascot-moment .mascot-img { width: 48px; margin-top: 2px; }
+.mascot-moment .mascot-speech {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.mascot-moment .mascot-speech strong { color: var(--text-primary); }
+.mascot-moment .mascot-speech code {
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  background: rgba(0,0,0,0.25);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--accent);
+}
+
+/* ── Challenge coach ──────────────────────────────────────────── */
+
+.coach-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+.coach-strip .mascot-img { width: 42px; }
+.coach-msg {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+.coach-msg strong { color: var(--accent); }
+
+/* ── Playground idle ──────────────────────────────────────────── */
+
+.playground-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  gap: 10px;
+}
+.playground-idle .mascot-img { width: 56px; opacity: 0.7; }
+.playground-idle .idle-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-body);
+}
+
+
+/* ==========================================================================
+   13. UTILITIES
+   ========================================================================== */
+
+.engine-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+.engine-badge.ready {
+  background: var(--green-subtle);
+  color: var(--green);
+}
+.engine-badge.fallback {
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.reset-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+
+/* ==========================================================================
+   14. RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .main {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .playground-panel {
+    border-left: none;
+    border-top: 2px solid var(--accent);
+    min-height: 400px;
+  }
+  .content-panel {
+    border-right: none;
+    min-height: 50vh;
+  }
+  .header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tab-group {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .content-panel { padding: 16px; }
+  .ref-grid,
+  .cheat-sections { grid-template-columns: 1fr; }
+  .answer-input { width: 100%; }
+  .check-btn { margin-left: 0; margin-top: 8px; display: block; }
+}
+
+</style>
 </head>
 
 <body>
@@ -78,32 +1082,1605 @@
        ════════════════════════════════════════════════════════════════════ -->
 
   <!-- External: Skulpt Python engine (CDN) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt-stdlib.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/Tezumie/Skulpt-CDN@latest/skulpt.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/Tezumie/Skulpt-CDN@latest/skulpt-stdlib.js" defer></script>
 
   <!-- Core utilities (no dependencies) -->
-  <script src="js/utils.js" defer></script>
-  <script src="js/mascot.js" defer></script>
-  <script src="js/state.js" defer></script>
 
   <!-- Data (no dependencies, pure content arrays) -->
-  <script src="js/data/lessons.js" defer></script>
-  <script src="js/data/challenges.js" defer></script>
-  <script src="js/data/reference.js" defer></script>
-  <script src="js/data/cheatsheet.js" defer></script>
 
   <!-- Engine + Playground (depend on state, mascot, utils) -->
-  <script src="js/engine.js" defer></script>
-  <script src="js/playground.js" defer></script>
 
   <!-- Tab renderers (depend on state, utils, mascot, playground, data) -->
-  <script src="js/renderers/learn.js" defer></script>
-  <script src="js/renderers/challenges.js" defer></script>
-  <script src="js/renderers/reference.js" defer></script>
-  <script src="js/renderers/cheatsheet.js" defer></script>
 
   <!-- Entry point (loads last, wires everything) -->
-  <script src="js/app.js" defer></script>
 
+<script>
+
+// ── js/utils.js ──
+/* ==========================================================================
+   utils.js — Shared helper functions (no dependencies)
+   ========================================================================== */
+
+/**
+ * Escape HTML entities to prevent XSS in dynamic content.
+ */
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/**
+ * Syntax-highlight Python code for lesson code blocks.
+ * Applied to rendered HTML only — NOT the playground editor.
+ */
+function highlightPython(code) {
+  let html = escapeHtml(code);
+
+  // Comments (must be first to avoid partial matches)
+  html = html.replace(/(#.*)$/gm, '<span style="color:var(--syn-comment)">$1</span>');
+
+  // Strings (triple-quoted, double, single)
+  html = html.replace(
+    /("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/g,
+    '<span style="color:var(--syn-string)">$1</span>'
+  );
+
+  // Keywords
+  const keywords = [
+    "def", "return", "if", "elif", "else", "for", "while", "in",
+    "import", "from", "class", "try", "except", "finally", "with",
+    "as", "and", "or", "not", "is", "lambda", "yield", "break",
+    "continue", "pass", "raise", "global", "del"
+  ];
+  const kwPattern = new RegExp("\\b(" + keywords.join("|") + ")\\b", "g");
+  html = html.replace(kwPattern, '<span style="color:var(--syn-keyword)">$1</span>');
+
+  // Booleans & None
+  html = html.replace(/\b(True|False|None)\b/g, '<span style="color:var(--syn-number)">$1</span>');
+
+  // Built-in functions (only when followed by open paren)
+  const builtins = [
+    "print", "len", "range", "type", "int", "str", "float", "bool",
+    "list", "dict", "input", "sorted", "enumerate", "zip", "min",
+    "max", "sum", "abs"
+  ];
+  const biPattern = new RegExp("\\b(" + builtins.join("|") + ")(?=\\()", "g");
+  html = html.replace(biPattern, '<span style="color:var(--syn-builtin)">$1</span>');
+
+  // Numbers
+  html = html.replace(/\b(\d+\.?\d*)\b/g, '<span style="color:var(--syn-number)">$1</span>');
+
+  return html;
+}
+
+
+// ── js/mascot.js ──
+/* ==========================================================================
+   mascot.js — PyBuddy mascot system (no dependencies)
+   ========================================================================== */
+
+const MASCOT_IMG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJkAAAB4CAYAAADhRFCdAABeoElEQVR42u19d5xdVbn2s9bae58655zpPZOZJJMeUikJYUIVJSgqg4o0KaJeLnqxXkWHWC8gimABRbh6/a5oBFEE6TAQIEBC+iSZ1Om9nLrrWuv7Y+9zpqQAEjRc3b/fgcyZ02afZ7/leZ/3fQn+dRzvBwPAKSEglKB2xtyTObdPL4iGT4vGYvWRSLRUEToYoYAvjyQT8dToyFDnaDy+2TbtV1Qfntm9++BezjkAoLGxka1du5b/Pf8A8q/v8PgGGCWE33zLLaEf//K/L68tL710zsypJ550whw6bcZMFJZVIEAl1HQfKJGgBVNhaTEk0hl0dXZg585d2Lp5U2L7ti0v6Lp575YtW/5ICJHeayuNjY1y7dq1AoD8F8j++Q4CgDBKRc20aR8sLym++aL3rZpx/ntOR6GPg3CLWyxEuJUh1lA7IeEyCCMOyghY4QzpC+dLzR+QWiBMDKj0sSeewQN/eAB79+1ZDyn+a8OGDQ9TSgUASCmz1vIdA9u/QHbcHZIAhGiqKqrqpn/vvWef+ZXPXfYBVIWFkxgZpqaeocrUJUBqCMJxACsBKThIagBUVSGSA5CBAkDYkMwPUTRTtqX8ou3AAXT3drONGzegu6dr6/Dg4Lq+vr5nPvGJTzz2wx/+MC2EeMdc6b9AdhxaMEVRRN30Gfd99prLr7jq4gv48P7XCQ9VUAYHvG83aPkciP490KY3AI4Op3cnaF4xePtGyFAhaLQSEhQk3gZIhkT5Kdi39wDSaUMwjcB2LEoksH/ffjz9zNMH2tvbf9La2noHpdSWUjLPool/gez/aAymaRqvqqm95z8u++BVn/zIOXZ/f58CRyeMMAjBoUQr4Ng2mBYAkRKCCshkH2isCnykEyRcCNm5BaRsHsAtkNQgZNUiyEgN4iPDYCpDQUGByAvnCb/fR3p6etn99/8Wv/vd7zb09/f/Z0dHx1OO4wAAk1KKcTHc28pc/nUcB0djYyPbtXMnr5la9/nLLjj7K9dduMIesBSVBSKEOAbUyhPAJUC4Ddq/EwCH6NsBZBKQ+bWA5CAQIGYaIBQy2QfCVNBQIcRoJ1isFNGiUoRCQTiOQxyHU8uyaSwWEStWrODnnHNOVX9//2VDQ0OVNTU1WwcHBkeampoAgDU1NZHm5mb5L0v2rj6aKLBGTp8zZ/aSubNe/8mXL2EGjTCk+wlTVEgAMlQCYoxC9O0EsQ1A9YP4C8EVAkoIZF4ZmJUBZxpY6WzwttdAuAkSiIGkekBKZiNQdyLWv/QSXl6/HqXFJciP5aO8ohxFRUWoqq4Skbw88vBfHiZ33HHHSHd3z//kx/y3rV+/ud2jP4hn3fhbtW7/AtnxcVDGmFi4eOGTd33/W2fNiIGntBIm+7aDFc8A8edDjrZB9GwFK6yDLJ0HEsgD0QKQ/Tthtz4LpWgaZGYUCBUBigqYaSBYAJIegBQO/LWnIM2i+MPaP+Cll15ygSklAoEAKisrUVZRhnnz5mLZsmW8t7eXPf3U03j0kUdGdu1qvd8wMvd2d3dvEELkstHGxka8WfrjX+7yOHCTLS0tomrqtLPPf8/ZTY2nTuMJW2EK42DBQjgDB8DyisHTQxAj7VDmrQYNFgDSAWEKpGkCg/sgfUHQcDGQ6ge4AKEUhEhIfxSABK1cCAgHu3btxsGDBxEIBKAoCgAgnkhg75496OnpRk1NDS0sLJDV1VPEGWecFZwze/YyIcQ1gDydUlWbNauyq79/JLljx44c39bU1ISjudN3DGRNTU20pKSEzp07l7a0tPwLTUc4WlpaCKVUTptWd9cX/+P6uhgzBFdCVIy2g+XXQia6IRwd0swAyX4gXAzij7kWRdiAEoDU45DtG0Dza8AqFkBSFVRRgFARqJOEoBpkqBR54TBSySRaduyAFICiKBBSQkoJRVHgOA4WLlyAyspK0ts3QIXDZW1trVi58jS6bNmJU8vLy86PxzNX+Xy+paqqGpdffnnbhg0b7Oeee0561o22tLTIvwfICADW3NwsWlpa5Lg3ZXiHmeV3XSTW1ESbm5tFNBqtWXlaw62XfvwSNTncT2i8nVB/BCAEiqaBCNsFjaJBpofAimZAKhoIVSC5DZLsgbQNEH8EyIyCqkEgUgoy0g4hAVI6F4T6wLmDouJiKIzh4ME26Lqe+8ocx0FhYQFOPGkZYtEYUqk0OOfENE1qmKYsLCgQCxculKeddlpw0aJFc2Kx2Me2bNnSCNDymTPrB3p6enq3b98us9//+O+avQMAk4rCZG1tXXUwGFyRn19c09CwcrC1tdX4Vwx4qCdpa2sTVVVVH/vkNZ+8YFZtBdfbNlJmG2DhQpj9BxAfHULSFLDNDHzCAFIDILFqkHgPSF8LyOA+CCsJqEGwgqkANwEnDZIZARwdqFoC4ouAABBCIOAPoK6uDuFwCKZpQAgBVVFQUlKEhobTMLN+JhxbQM/oEEKAMQZKKbEdh+q6QQEiKysqxUknnYyVK08rrq2tXTk0NHyNaVpzy8vLEqOjo/ukG7jlwEaOMcDw7LPP+q67/j9uX7p48SVz5swKpdNpvPbaho729vZvtrbuuse2bXosib53+aEQQpxTTjnpt3fdfc9HK0NwjPbXFSEpBkeT6LP9sFgYQg1CURliRhfKrYMIls8A0oOQRhxSEtCqRYAWAO9tAaOAVIJA9RJIXwxECYJIAUkIiBfsK4oCTdPQ39+Pjo52WJaF4uJiTJlSA0IIUqkMUqkUOOfucyZ9aCEEICVUVRWhUEiYpqns3NmCxx9/DBs2bHh2aGjo9s7Ozj9zziGlJMqxBJmUkp6weMkDX/va1973sY9cCAAcAFKpdPWNX7/xF7ZtJvfs2fM7j1Xm/+QAIwAcIX7HVq/+1cLC/AI4Too6zIeuniF08hhM4oOwLChmEqrmw2DGj4N9Npb6R5FXOhXETAHhAojEIIiigWhB8GQ/SFE5SHQKiGO7XssDGAAQ4rpGx3FQUFCAsrLS3H2GYUJKwLZtF0iHARgAUEqzlpGOjo5SQoicP3+BWLhwIdm3b9/pjzzyl9Ofe+65dUNDQ7f09fU9fEzcZUNDg9LW1sYffPDBj37ogx/5yr//27VWRjeoZdnUtCyaFw45y09dgT8++OCc9773vb/YuHEj/5frBAUgn366J5afH/vy+z/wwaBl2Whr7yI9Ioq0ydFx8AA6OzowNDQE7ljQfD7sONiHhAHU1s8E1UfACAUJRMH79wBMAS2og4xVg2hhLywaO83jgUYIAecclmXDsiw4jgPGGBzbRiatQwp51G+IeL+klIIQ4sZuhkGKigr58uXLsXTp0hrO+ccsy2o4JpasubnZ+wPIWctXnCYMk1MCEKaoIEQilcmwSDiPLDjhhGl3/exnpYSQTikl/WdOBJqamrBmzRroup4XDIbyCAQOdvah2/BDcAdt+1qx/+BB+P0BABK9Pd2oq6tFeXklNuzcCS3WirMXVEMO7AQJBMACMUALQIbLQGPVgJRveB1nQZf9t+XYSKZT4NIBKMl9PS71Ot6qSchJfCxhBBQEuq6zVDqNqqpq/oUvfoHs2LHj9GPlLmXWYzJGYJkclAkwBkiQXOhHKIHf7yemaf7TB2Nr1qxxv9gBKwkgMTwyWtzV3Q0hBAYH+9HZ3Y3i4mJMq6uDZdvYt3cv+vsHMGNGFIILPNv8AiJYhBVL5kBwC7R0DqS/EMSxXFUGefOOghAChztIJpOwbMt7rvSAeiTOXh72HsIoFKpAN02WMTKonzmT02PkLomUEslkan3rnl00GNbEaDwJy3HABUc4FBCDQyPYsnnL3h/96Ee9Ukryr+AfQkpJtndsHxkY6O/eu3cvJIEQUmJ4eASO46C0tBQlpaUoLS1FQWEhOOcwTAv+QAC6zdG8qRXtVh60aSshlBCInQEkf0MwHAIwx0EikYRlZQFGvKd5/87FZvKQ1yOHBaAAJQSMMWQyGXZMQNbc3MwBkA98YPXa3/z613te37RVKy0t5abJkUoZ6O7uwze+fqMYGhz83qc+9Sm7sbGR/rNbssbGRgZAnnbaKQsVRa21bUcQIillgM/nB+cco6MjyGQyyGQySCQTsGwbqqIhHI7Ap2roG05g3cuvgjs2KKWQhAITLJgcdyOHBZjl2EikXAuWs1qSQErqeiBJxgwaABCR9Z8TjByR2ZsEgcw5V0rpsePJmpqa6M0336zX1U199rG/Pr4yk86UOZYtN7++DVu2bqPPPvukNW3atBt27NiRbGxsfFtV/f8LmWVLSwuklMqPf3zXoxdffElNXiQqbdOilFAwxjA0PIzR0RGkUin09vZiZGQEJSWlqKquhmmaGBkZAiCQSCRQXFyMisoKCE/HPxbgjwX52fuklLl/W5aFVCoJ27Zzj5FyIoYOT1S5FixLiRzJoWbvPGYg80BD29vb+5566vF7r7/+30ra29qX+P0+4fOp0rYt9ZVX1q8fHh5uyZKQ/8xWbOfOneLhhx6+7oRFi644+ZRTnEQiwShlEBLw+f3Iy8uDYZgYGhoE5xKVldWoq5uGQF4IUjjo7ekGJEE6lYaeyWD+vPmuNfNANBaTkUMyTCkl0rrLhTlcghLqBfau5SLjnkVcZI5ZyFw+QL3HSu/ViZcwHwqyY+22xOLFi9X6+npzzpw5fxRCkFAoiGAwIKdNn4ZAIHAWIQT/zFZMSknWrl0rfv7znxf4Q4FvnH766SKRSDBCCMS4jLCwsAhz587FkiVLsXjxYsyYMQPBYBAMFHmhMDTN5zHyCg4caMPWrdtzBe/xAJPStV5Z8DmOG+Bn0mlwIUByjzlK+HaIC37rXM0xPVavXs0BkHQ63W0YhszoOqOKQqfPqEdeXt4Z27Zt0zwi9p+SJ7vooosoIUT+8Ec/vO6U5acUxvILhOM4BDlbIiAFhxA2gsGgG/QX5ENRXGUsgQRjDD6/H0IIUEqRTKawffv2HJDkuCCKEOJxWQyGYSKeSCGjG5CSgHiOLGe1JEDl4byeGOPOJfXitiwy6TgYTVT+EA+4xxxkN910kwQgZ86c2aHr+rCmashkDJJKZWQ4FK27/vrr53kug/6zWrErr7yytCC/8HNLlp4kU6k0Y4xNDNRJ1q0J2LYNx3EgpQAhgBAckgA+TYOr7xJQVQWdnR1ob2+Hz+ebEHu51osjlUohmUx58Rcdu8azgBwXi0mMWT9MdrryrRkz8k5YMs9Uk5///OcjGT3dNhqPIxFPSCEEr581m3Z19ZwJgKxd2/9PZ8lWrVrFAMgXX375ylNOWZ4fCgY5506O5cx+sZMt0XjOSwgJAgqfzw8QAiEBVdPQ19eP7TtaQCiDBAEhFJwLpFJpjMbjSKfTuVpk9r2A8e8nISEhxv13YmZKPOBmvWf2+eINkfdOWBMJgAohoFuZvSMjIwiFQqKgIJ8sWrQIPp92nivfbf5nC/xJc3Mz/+LNX8wrLir6zOLFS2Qmk6aUwvtC34qRoFA1bQL4JIA9e/aiq8tLCNIZjI7GkU5lYNuOW7+kdJJlnUR2kHE/ERdQkMJ77GSX6N7GAIe/K8hcdywlFKK2ZvQ0AgE/0pkMUxRFVlVPWb5y5cpFAITHFf1THA0NDQyAfPQ3j31k/oIFVZFIRDiOQ7NuS0p5NDc7ARiUAqqqjKMdJFRVRVtbGzZt2gRdzyDlcV+SSFBKMLkAML6OiQm86yTKI/dEkXt/eRgL+3cHWUNDg0fEsa2pVBwjo8NkcGAQQnCxatUZ6tDw6K2KomDt2rX/NC6zubmZSylpXl74UyecsFDquk4opUcF1mTX6YLCtR5eYXpC/JVOp3HgwAGk02kPjASUERAKECpdInUcWslk60kl5LjHyHGBGPHcqSQY+/+4298dZKtWrRIAEImEdqVTaSGEoH6/H35/gM2ZM5fPnj33zJkzZ15NKXUaGhqU/+sAy7L7K1asWFxVVbW4vKwMpmnRyVbjLdECh7g+Vyc2PDyMeDwOTdMOAauL13HAlZOYe3lkCwpv4Mvf8nnfEZCtWbNGAsD06bGDpmn0M0ZJIBAQlFJ0d3fTU1c2iHAk/44TTzxxcXNzs9PU1PRGn+MQfvB4jr28cIF4NdqcxU4mkx+bO3s+ARQ+mYX/GxOsMc5TSqiKguGhQYyMDKGoqADRSATRvAgi4TzkhfIQDgYR8Pvg0xRQ6nIMBMKlKKSYQD0QCVCQiez/4eiNN6gQEELwjtII5557Sca2rUQikUB/fz/6+vqQSWdIQVEBrr76moAQ8sGvfOUrhWvWrCEAFA/0DIDiWThl3DU2Od2h3u+VhoYGpbGxkXlg/bsCsampiY77rDQXQxMix/Unyvvuu8+fl5d3fm1dHQxDp5P5rLcCrAngHOdSKaUwDBN9fX3QNA2KokBRFOnz+aTf7xeapkm/349QKIRoNIpYLIZIJIJgMOgSuQSQQiLb+va3gH/y5xVCvGNfBnHPgVROXr5i54rlp00vLi4WBQUFNBQKwedXkR/Ld1579VXl3nt/+fsDB/Z9ZFxPnxtj5Ey0AuFYDDdB4iY372Gqxt2TKwAhjpTb5FjChoYGlJSUSACYM2eOvOmmmyR5M2nRpETmpptuIi0tLaR/7VrS7N7vjD+hkjD3T/9wc+AzDcPReLQ+85tLZqSooopLLv7wbCnUHRd+5GNIp1KEMppzV5O/zPH1xUMtl2sX2tvbsWnTRveK8gBLGYNpmpg1sx5XXXkFCouKOOeCZaVVgUAAmqZxIYQ0TZMYhkE558Q9994ADC7AOQfnHEI48CTUY5+RZJUXZKJ5I2N6jDH3TBAOh/nfBWTLT1k5vby8TFRVVVGfTwMhwOjoCBRFk7///e/J7l07Hqiqqg5zzlUheHpgYGCfw0J7VSLrK/L4co3wCOdCShBQqtKEbg8LSRKWIF0poRw0ON0LNdgZV0q6ac38gfhfvjtKpEtU4uhX49Hc8GTrOdE9UQqmapj53mumpQ5uP7FIzawIcn1m2OeUBzUa8ftDMcMwM6MZPmQKta03ng5/5KLGlaesWC7j8QRhjP1N1oIQNyE/cOAAtmzZ5GaO4wSFbsNuEJd+/GPIZDL462N/FcPDw0NCCCsWixXMmzcvMHv2bEydOhX5+fnQNE0AEJZlE9O0CedO1tUDcC98ITzgedItIVwAuZ+fTzAO3gUiQ6GQ8PuDZNeuXfSdB9nJK3aefsZZ00OhkCgvL6GRSASjo6MwDBN54QgSyZTs6e4ihQWFOOnEZaioKkPfQB92PHE/ika2YkZZCKGAD4QwcCngGBZMy0TGdJDQbYxmHIzoNgbSNroT3BlMOSPDGd6X5LTXFmqXTbXOBCcHpRbpl1TttWKVg0VT543OveeG1FpFswgkpBgHRs85E0pBKIUA0Ghb2qYr740a+x8vVTNDU0kmPi1f4fMK/c7S8qCYM7tY1RZURVBVHEQkFIZPZZDchrANpDMmRpIW9us+sMWNoHnl4LaRqym+9YDfBeeePa1oaWkB9WI7kSspCQR8ITEyOkS3bdn0456+vrvq6uq6CSFWa2trYVVV1bJwOLw8HA4vrKysPKG+vr5wwYIFmDFjBkpLyxAIBKCqKpdSSs4db26G+3/uWjky3usQAkkIAVOYVBRVMsZgmaZy8GAb/vjHh7Bu3QsvvuMgO/XUlTtPWd4wnTEi/H4fDYVC8Pv8rvBOt5BMpODTVH7SSUtw4knL4POpMHc/Ia0ND4LGKqHUnUzgC5FcxUVyEGFImAkQKyOpo8PcvY7YI91EOA7NWA50iyPpAHGbYUgHBhIWBlM2RgyOpE2shC0TaYelTNMa4MRnxDNmry14himMMAFiOpZgihINKUqRAtsXC2nFIQWxqCpiZXkMlXkM1TEV1aVRlFRNRbi8lrOS6RLRKYQTjUgQSG4TcAuEW1IRthxMpfFSm8kMoYJC/o0xjwRjbhPutm3b0NbW5mZ72UzRA5lPC/Jdu1pYOpN879atWx87XKzkvXdhSUnJwmg0ekpBQcGSsrKyuRUVFXVTp05lU6ZMQUVFBQoLCxEOh70YT/UsqQQkz5WfTNNEWs9gYGAAu3ftwosvrOPbtm9fNzg4entvb+dD7yh9sGPHDurz+RAMBeHYArYjkUzpIITB4RKpZBqKomDW7Jls3rxZoJqKkV0vYvTpXyJQdxLyV14JLRw7xIcRAMIz446VQnxgCI5SApIekTBGECSOjDoZWUshiRRgRIMkIBKUSglNd0SRxWWR6YiphslhOiFYUnrd1O4baJDQCEfApyCoqQhoBJqqQCGCg0hp2hbo/HOptvDDRPijjATywBiDemgiRiiAnpZWpK1NUBiHPBxf8KZqny5AbNtGMpmceEYmKC+EjMZiyOips5uamp74y1/+wjZs2OBkY0ov2xUAhvr7+58eGBh42nN3anl5+TQhxAxFUabHYrFZeXl5NeFwuCAUCpWoqsY0zR9RFOqXUsBxHDOTySRs27bjiUR3MpXab2QyGymlT+3du3d7Np57J0FG58+fb51+xlkkHIlAz1humxUkEqk0KCSqqyqxbOkiTJ8xDaqmwUwnYG77C/yBEApP+hDUcAyS84nRkpQQHl+jMAZBGbRIMWJLPgSiagTChrQNknjxlxg9sAlUCAji9RoQAiVWJX1T6xE0EzJopSSMFJDqkxCO+z0RCkIAKRUiQGDbJrjtEN2mRHckhJSMUAFwBz7qQzhWDqZobmzCHRyS8RNXv5AcHvBoAuUtWbCJCYCbVMfjcSSTiTFQjQ8wCYGQnEQieejro0u+/e1vC69mebiqFWlsbKQe6CQAu6enZxeAXYQQdHd35z5rTU2Nv62tjRQXF0fLy8sDADBqWUb7rl3xf//3f+c//vGPzUlJTJYB4O8UyBil1JkzZ/4ngsG8GlXRREZmqJQEnDsIBv2YN2cmli1djNLSEjiODUkYROcm8L6dCC2+AEp+DYTkIHSy6G5iiC6FgIAACxdCiRS5Vs5KA8wPIjgoZaCUeOBkCE0/iUSWXwFupgkkhxPvRvz5e+D07vZYbgFwC76apQgt+RD8XEDaGegHXoG9uxmUUXf+lwBkcgA8PQwaLfUs4KGMEKEEum4glUrjaAz/GwMMUBQGw9Cx/8B+OM7hm0WklOCcE1VVAWDaCy+8EFi+fLl+eLoVctL4TtLU1DTe2uWKlW1tbQYhBAMDA/rAwMCEz3jnnXfmQNXQ0EBWrVol1qxZk9MHHXOQNTY2sgceeMBZsGjRxfnRgntPXdkgU6k0gn4fiooKUFVVjZopVaioKIM/EIDNHUACCiPgA/sgHQta2Uz3BAqMcwNjFyLJFmuJ93tCAekAUkBICW4kIfUEiKvOApUuyChcmoH4glADUff5igrmC8OB9EBAIBwHxB9BoH45GPGkM04GZsvTIFBAKYH0XpN4Kb08QgxFQZFJp2EYBt4sN5brFvJcIaUUiqLANE3s3r0LA/0Dh/jR8RyakJIqigJCadmdd95ZA2DX4WiRw33gLJF+JBonS+UArqxr3GtKALy5uRnNzc0TL45jTUyuWbOGL126dF5+QfG9X/rSVyTnDnx+P5lSVYH8/AiCwQBU1QfHcWA7tutXiZuGc2MUNFgAGoyNJwuOml1ACJdVVnyQhLp1NKZC0myACkiP0SZZaYoUrgCQMcBOAzwDCAEQ5gXPnmfjHIJwUEpBCZ0AJZfWFyDZOE4egQQBkEgmoOv6Eb/kw0umXV6XeqHB6Ogo9u7di87OzkPPQQ68Y4VwSqlQVFXp7OycAmDXRRddRPH2uvblOOsqvcrOm3riMQXZmjVriJSSLFq06K4f3X6bb+bs2TwZjzOfzw9Vdd9KCFeI52oqvb4WwWGlRuGkR8BiFWCBvMOIXybJ36SEJMSlCvQknOF2UH0YgvlAjDikmfRA5bLYRHJIIkCJq2KQkIB0QLkN6Zhu1uoAkhJQIqEGQmBUhRAOQNxph2DuJ86OW4JjQXL7KDUG985MSgd3BFRNw5gG6/BEK6EkZ6A5FxgZGUV3dzf6+vqQSqUOERJOCCM8pQQlFJQQEQwE6MBQfzUA9Pf/4/R7xxJkjFLKq6qqrv/qV7+6Yvbs2Y6u60owGMwBK3dCiXQ3aIDCGOmG0/oM7PbNcAb3IlB/hjv6KCfVPPq5kbYBp2s7hnc/A8UXdKcPCgkigNDC97tAcCxw7oCnBmC0rsNQcgBU09xszcwAqThYXjGIZYJzG1QjsEc6kN74B8CzklZ3C6jiBxEOuKQgUgCmDcmdiWnvYY5MWoftOKBMASAmdBFNUF1wAdt0kNHTSCbjGBgYwvDIMDKZDDjnE5QXbwYxoWAQA/1iuqcCwbsdZASAOOecc4o559+47LLLhGVZbHz3TC4FByCpCm4kYLSug9HyKPjAPghTB5HUneqs+CYR8oc5rdkfrRSkkQAfaoejBVwOSvEhdMJ5iKy4CqDMnWlPFNgHX8XwX74HY7QTYBQQ1CUvZ5yK6KlXQnATIARW7y4kXrkf8Rf+G6DEVZtKwD/nXPiqFgDchtG7F04mCXA7161z+J5qYMeObVj34ssoLCwAUxh8Ph98Xm0RACzbhmEY0DM6DN2AZVtwHHdGhZAyF5Plym2HeY+sajV7nxCC+Hx+SElmUEohhJDvdpAxSqnT2tr6uZtvvrkwHA47mUxGyZ7EMVkJAScEVtc2mBsfgNn5OmgmCQkJxReAsCwQVXNBJt9IJOLxs3bGbcv3hdzncTe2EkQB1fyAFnJHXxIFtj8CMMUlEoUrUSbcBs0rgFJWP8bBCceNtcwUQCQcxwEJFcI/dSmCs8+ABMC6WpDc9QK4F1eO6fIP/S4TyTgGB/thWUau+SN7y2bIXAhMZNKJFwuSXDWCHDVckhMuyKz0B0DxW6zTHn8gk1ISQghftGhRtKys7OrVq1dL0zQZY8yTuXlNxwQQlEDfuw76C/dADrWBUAYaioBMORksrwDmzidAtKA7QVDww1ICk40Ztw1I4YxPcABBQPiYfgpCeh2mDkC8Wht1+TABCWHq7mtIAUkVCCMJSAdSYSAgoKAgqg98XJ2Oan6XT3Nn3h/eW3p3aD4fVE11S1UeiTwZUFlQ5czReDXsuJ/HYW6C2pVM4naEEIQQgkAgUOI4DiWEiCPQGO/48balPqtWrWKEEDkwMHDJhRdeWOL3+90WL5JVYgqAEkiqwNz3EvQXfgExdNBVboaK4Tv5CsTO/iy0qgUQkoAG8vBmLzsiBWDrALchuO1mg9yBFBxUoSCEg3DbpTeEDcItcIcD3AUU5w6Ew10QUQYpBCShoJofggsI03TpDMG9dNPxYkriDgWWDoSwJ1gZ9/dZVSnxQKZ5ReVDQZWNs7LD5nIKhsMFDB614apj5WESo4lAo5Qg2273jzzetiXzZMVkxYoVV77nPe9xkzDG3Cvb67mTRMJsfQbpl34FEe8CVB/UomnwL/sofHXLofgDMK00wFQgkI83Dve9kyodCCmhFNYBvhC4rYMpfkhuw2jbBLnulwDVsr02sPvbQJQQiBZ2A3jBQYgCK96N9OYHXUBpftjDHW5W6QuDEYDbFoSeht2+BWa4EIQwWP0HIBJ9RzC2xLM4LgDq6uqQTYDeyjcux7H4f5uXASil726QebyYmDJlytzzzz9/QXl5OTKZDGWMuTENpRCEQt/1HDLrfgE52gNQBWrlPIRXXAWtagGkY8NxOMyRTjDFDyUQeXM2nQDC4RCORHTVtVDyCiEcHUwLwhnpxuDD34K98U8AU3J8GvwRRJZ9EP66EyGMDKBosPv3YXTdPbCfaQXVNBBOwB0bvhnLkTfrdDhGBsKxYB98FcbO52AcWA/CBQR3QMKlYG/C5M6fvwClJSXo6OyE3+d2fk8QHk6aaEiOGHO9GUiOeyQBHMlHx/1SvutA9txzz1FCiPAFAqs9dagjJZRsGkmoArNtI/RXfg053AVBCFjJdIROuQxq1QIIxwJ3BCwuYI0OgSo+EF/IO1HkDQJd77eWDhaKQIlVjMUjtgEJBtgWiCdqpJKDEQmlqAZa1UJIyUEIA1M1UCIAIwPYJiBdripQPgeB+lVwHBNM0ZBSKYy964BMws04GQVUP4Rt4kgcRlaCU1xYiMVLlqC9o+PQcpEHsLdjbsbJbsaVoBSR0dMQQu6hlErvu3b+ESCjb9NVCgCIRSInL1q0aMyLUQrBVBidW6G/dB/ESAfAKLSCakSXXwa1ejFsQ0c6ZSGVMmFaEhAcRFFdl/mmT7qENBNu6CeFS0FIAWmlIcykW5JhGhRFgwSD4BJwTEhueS30AtxMg0rhxlhUgWAA1XyQ3B0mx4hnlTMpl7z1+0E1HwAGYRggXkx2lE8ICYnzV5+HE5ctQTrjNdl6Qf6b1YpLAhfchwxSoW6W7Pltb2iwVDVN9vf10YJo+LdSSjQ2Nr4rs0sCb8BKRUXF3MrKSjicU6KoEFYa1sENsDbcDzG4151ZVTwNoeWfAKtZDj2Vga57VoMQABzSsXNCwTd9NqRwKQRFAyEUlKjuyZYU1Av0heO1hNkmpJMHqH4XyN7WDkgBO6ODUQLCAAgbXHpd2HSsLVQytyhOPPmK4ByEvnGVJmvNotEIPvnJT6KgoAgvvfQSEokEmKvBH6MyxnURTXanbiI1fuhcdlidawdd0SKk3+/nlm3Tlh071FQy8astW7Y8Sgihf++V0McEZE1NTWTNmjVyaGioYumSJdU+hcGMDxGe6ofZ8jjs1mchMnH3TYprEVhxNZTaU5BOZmAaFghh3ol05T+UW95po3hDCn08zs04rH0vwgkVuHGS6oPduwfUFwaI4patmAIoEoRRGJ1bXWvn2CCBKJy+PaC+kCsFYh51IghEegTOcBvs5CCY5gfRE6BqEFx6pSeFQRIC7liHvfrkOM9OvYaKWCyGq6++EsuWLcVTTz2FAwcPYnRkBKZhjhuMQjA+VqeUQsIdTeA2eXBXBCCEq+hlPoAQhH2q5EKQwcEB5eDBgw5Ttdu3bNnyhX80R/a2QNbS0kIAIMPyKwrsAb/x/I/laF8HIfEukMwQuK2DEAVKaT0CJ18GZeopSMWTsG0B6lkINy6S8PsZTIUApnDpgjdtSwlkKo6RLY94Ulx3jCQJFiBv6ceglNa5tUWqAFIgs/MpGFsfh775EYARQDIQXxiB2WfAVz4bwrFAfQFYvXuQ3vYE9O2PAzwDwSWkL4ZQ/WmgxbUupyYE9N3rIM30Gxfx5bjOHQKccMICLFgwHx0dHdi8eTNaWnZicHAQ6XQalmXBsmw4tu2By+t1pO5wPKapUBQVPn8AKgW0TB8izBFP7OiliVS6A4L/de7cOXetXbt2EyFkUrfHuwxk2YJrfmFpZbHRDr65T9gZm6mKAqIFoBZOAyufC/WE88CKZyMZT8KxxYR5DIxSBAIM/pAPPBCBFe+AsNPjBhq9cT4lzBFAT0BSxQWdrUMyH/y1J0AtnwspOSihENwCH9gDc8eTbjEcPggzDQEVgbqlCM0+xwWZ6kNm3zqktz8JmK5Lg2WDBIuhzTodoRkrXCGl5LAG28YF/kdND3OuU3pxEyUEU6ZMwZQpU/C+970XqVQKw8PDGBoacRt0kynohgnBORglUBWGQCCAYCCAPB9FRKNgfVtQ2nvAfmBTn7qvc+THP7n9lq9+6EMfSm7euhVw6efjYlfC2+bJ9Hi/L1JYAkTyIDUClheFUjIN6vTT4Ks+AYIypFMpOLYAmBdvSQKFSQSDGlSFgVIGtbAa5oH1sPUEVI9bc8mmI8ONSAnpGABVQBXV7aBRpCso9CYGgjCPAKBZ3wVCVRCqAFQF0zQQNei+l6p5n4+CKQzgGkAUEIWCBsJgvrBbhVAoKFTQUOyQUePjKmhjAfuhBhhSCgjhZtFMURGL5SMWy0ddnQAcA9LIgFsZOFYG0soAZgYQ3E1IzCT0zh3wD28SuwZ09Vcb08MXfP4nN11wwdlJAGpTUxNfs2bNcbOM422BjBBgtOeAINMvgjzjHNCMDa2oHIFYAaAwUBAYGQu25RZ5hRfIKkwiFPJBVVU3iJYCalEtKGWwevcgWLPkTWYeAsLW3S8lx5Y7oERAGnE46SHvd26U5NUfAMt0dWLcBhEORHoYTnoAUghQLQzpZFw3axvgYG4FwUxBGnEIM+lSJFRxqwxvRe2aqwfR3AgmbqTh6HEIYwTWSBfswQNw+g/AHu2FtDKgXlIkHHcAnvTm62uMyRd6bPJfj3W229VLLvrZ9ecMeYvq7Ter83pXgExKAlWV1PYXQ6lcBDI0COEPAFQFkRymzWGYDgQZu3oVShAKalBVdw1eljG3wiWw8qogdjyGwIyT4S+sczXzWSHi5NK4lBCEQPrzgbxSSMXn3s8YoAaQ2P4EyMENALfdCc6EgY92gYVLIS3DK/9QCEVFZt96WOkRQPGBagHY/fsBfxRECYBQ1U0UJJDa+zK4kQDnFoRtgI/2Q52yaCLNMNmhy1xQlqMZHDMNZBJwhg/COLAeZudm2IkBEOIHCeeDhEtAS+oBRYUc6YQc6QQcHdzOQLoZpqT5Efxm01CmpeyMswf//JNWuAA7LlcJvU13KRGJRAw945pyIgQsw4CqAKrKYBg2uEcVuDIVAr9fhaqp44q8FBAcm3a1oauTYrHTgfDWR6CeeDFoqPDoJJ8aQn7DJ+GkR12wSncoiKvNskHAPS6KuUXyKQuQXYIgs2ClAKgCQjUIQgDhQA3nI1i7xIv6qFfakZCMAUQBoxTEseEvmgpfSf2YCDGrZRpfRyQe18Md8Hgn+NB+2O0bYPbuAdfjkEoQJFqFQO1yqMV1UAtqoURLAUWBFBQi3ge9azPsgYMQqUE4ehKOZYGWVJD8wpftwb88PACAyt//Xvyt5afjFmTZtv94PNUZj49ACEFd2obCsji4I2Bb3OV1PDmz38/g92u5Nh5C3PLK65s245GH/wqbA5XT5iN/88OwkkOILL0QNK8MhI2N/87p3j0C0lc4Bb7iWtdUUgKS20km4ar66RsmD4eL1d9oFweZ/BgyiYIVFuCYAHfA9Tictg1I73gC/Z3tiJsAK5mCqoUfRP7sU8GCBRCEeRzfOOUrBVh+BcKxMm/Uk4Bh6kjE0yDBMPQ/HiQLajrUrVvbBY7jQTR/M8jmzJkjASAcVvv7B/otzrkGEEmIJLbtwM6NKnJJU0VxrRgdVzimVMHI8Cieb16HoaEhnHTyyUgVR9GdiKGsfRtGujZBi5aB+EIQlIFQBYrmB2EKuPCK8FQF04LulU9cTowSBVQNuAut1KDLySkqoPjdGEpRXD0/XO1+dsogYYpHd8ixzR7U4/OkzA0Tl8ICuKc5kwKwDUhLh7AzEEYC0tIB24Cjx+EkBsATvRgdHUFnUkFbpgT7nAg0UYzaPRaWxOKYNq0IzNVbH5ZryIkiCQOHCqqGZVq3yMDAQP8HP/jB4a1bt+J4tWJvC2TZrpZYrLR/YKB/0DT1CsaolFKSLC+U6y4igN+nQlWVnGuR3qijPXv2oa2tDdOnz0BRQSEcqoIt+ihG4/uhtz4HZbAfAZZCQGWQvgCGRjMQto2yshIwwN0rJF0pDhcWBBc5mQshxGPoBaRwxqyPcHKeLbfPkVIQqrhVA68Nj1DiKmsBgDsQgrtWiruSbim4S+A6jgsFqkBQCgIG6guB+vNAfSH00go09/kxpJSgtKYGp0ytg5FJY8OG19Daugcf/UgjZs2edcQ9QK7hlzANG3ragKb55eBAL/p6e9u++c1vOl55UPyfA1nWa2zfvj2dn59/IJGMV8RiBdJl88crRCVUTYHfr0FO2Fzm/t6dDJhBYWERFFVDeXk5/D4fDhhhjEZPha9QQW11BSJF+RhOpfHXBx9CfHgIn37/tSitKoOlpwDuQEoHhDuQXEBIB8Q2QAR3eTNhQziWqzsTAoRbbr8mN0Gy2zi4A2GlIYWVmw5Nxgfzns6LUsW1iIoPhKlunVP1QxIG0yHgvjCoEoQvHIUvUggaiODpPzyIXtaK+vqZqJ8+DdFoDG1tbVi6dCkGBgawfv2rqKyoRDQWzW0HmWzKLIsjk7HAhYTP75M9Pd0ymUxs9c7z/1mQAQCVUvLR0dEtBw8cWHHSSeXSMMwJ+gnKPDdJDy9NzmRSAABN01BZWYlYLIaOjg6k4sNQCUVpSSkKSyuRcWx0dA3AMDlG0yYsKFCCMTgs4HX4ZKfbyFxWR8eLXyiZUOrJPvZQZb4Hrqx2PrdVg4wli+5EFjfRIO6rOELATujgjgMBAq6pQNCH3r4eHGxvR0VZCWqnTkUgFEZ7Rzss28asWTMxZUo1/vTQH9HZ1YlYfuywJ9k0bKQzBjhHViZEt+/YToaHh58hBLjwwka5du3a49Zdvi0VRnY73PDwcPP2bVvBGMtppbK7pHw+Bk1lE8cLARDZvTuMwrJMFBYWobS0DH19PRgZGQKhFMXFJSgvL4PgDjoOHkQqOQJJRE4f5rpegeysMiG4qxsTbgbJpQCXElwScOHK/4V0H8KFdP8vCbjwbpKAS8CR3v3ZmyBwhHe/gPtYLsEFBxcSjuAgxGVPIAQoJLhlAUJieGgEumGjrKIK5eXl6OnuRCqVwJSaKkQieYjHRxGPj2JkZMQb4zCBbYbNHWQyJtw+EAFKqczoGfraq68MlZT4XpISWLt27XE9SfxtgSw7G1ZRlM0tO3fZpmkqNDtdUBIwhULT6CHLO+U4GqG4uBiMUdi2gcHBPvT19YFzjlg0iqqqKmiaDx0dHegfGADnHKZporikEKFQYKL7lZ6oZvxA33GmS3rzyuQ4cGZ/nvBvr/l3wr8lh5RZCfb4G7zXlbmph9mDCwHHcRCNRl1BDqXo6elBKpVGVdUURPIi6OrqQn9/P1RVQygUmjDGIHvOBBfeOhz3Ag2FQnzXzp1y567dT27f3jHilY/k/1mQZQ9N0yzbscZp1V0AqSpxWf1JE5JzmzK4g/kL5mNKTRXWr38Zu3e3ws1Yw6ioqILPF0BvTw/6+noBAD09PRgZGcGiJYuQX1QIJzuMJTdWChOIUZltFMGYZl7mfudSHtkbYe4ta4IJo+5yeOk2koC4P+duyL72uNhDoWDjtjuapoXS0lIUlxRhw4ZXMTjYj9mzZ6OqqhqDA0Po7uxCZ0cHptTUoKp6ysRhLVICkkBVVGRf0utAoo888jAZHh2+T0qJhoaG436C+NsCmaeMhWFkzj3xxJPUQDDoZLNLRgFNU1yJyhGKxY7joLq6GkuWLEF3dze2bNkCx3FQW1uL0tJSZDJp9PX3QggHg4P92Lp1G/Ly8nDCwoXwe7uFcoz6YSOriXPpCR3TaHHOcytlTNOGYdgwTRsOd+B4v5swOzW3jWNMFYEJ06slFFV1pTnCLaM5jtt4snz5cgDA3r17MTg4iD179mDXrt3YsaMF8cQoGladisKiAjjjgv7c1ELXU0BIiUAgwLu7u8gL657f0n7gvmcAUG/X6HF9vK3AP9tEcvLJJ1956orTkE6lSXZoiaoyqIritcTJyaFGDgqcc6xatQp9ff149plnQAkQCoQwODiMvv5+9PX2YHR0GHv37oXP78Pq889DVXkFHMs+8tTlLKA8MGXHiwsuIIQE5y54uCcr4o57P6Uk13ArhICisFzCwhgFZcwDm1tsJ9RrmvHAzhQGpjA4Ds8VAFKpDObOnQsQgqefegrPPfuc97oUmk/DaatWYu6cuV6MKQ+bWWqairRuIBgM4J57fk+GBgZuIeR0p6GhQWlubnaOd5D9zabWK8by6urqueecc+7mW275EUulUkRR3BgsFNYQ8GsTxlZOXm4gAQgpwBiDrut4+umnse75F9Db2+/qpyj1VKVR1NXVYuWpKzBv/jwoTJmwJ2jyH+RwDtsZm3Xq9jm64MrSK2QcTX+0aTuTexxdGoPkkhavO9udl6YoEEJ6VnBsvGYw6Ec4HMTw0DD279+PZDKJvLwwamunoqioeEIPZs5VjrP4tuOAEMb379/Prrji0k0bN2w8iRDC8ZbXab3LLNlaT0/m8/k+fNbZ71FUjTmESEVKCVWjUFV25LmouS+aeFovjmAggAve/wHMnT0HGzduxOjoKCilCIXCmDp1KubNm4dYLOq27o/r9pl8CEhkMjpMi7vEw7iHuVbpcCtbjrJ8auKMl3HlLcBxhCe8dF/LtvlhwwLDMKEoFAWFMRQVLcuB2p3JansltsMDXUoJSohkjJC77vqpPTgy+gVCiO1d5O+K/VRvJ2ikUkq5atUZL997369PysvL45ZpMhCKYMCHUMg3ofN5ctaUcw0S48JyN/4YW82HXAbn2A64eINzSggM00I6pWPyttrJVuJw9x39pY9s7Ui2Cn6U1/P5VQSDftDsPLPDnJfDPU8IgWAw6GzdulW5+OKLH9u9e/d73Z1MeNcsQPubAn9vKYOIxWI1c+bMOaGoqAiGYVAQ4s5N9cZEHW28efakyklWxA3EzdzNMAyYpvUGAHPdn+AChm5NcIOTV++9lU0gud1W5FCwTlhZQ94YoKZhw7bG75Ilh1isIz3Xsiw6ffp0zJ49e+rUqVN9wNvuojv+QZbNKsvKyj68cOEiP2OKk/2jVUahqvSo4/OPNvl5sit7U/uHiLtbNktaTnz8WDu/EG53k+PY7ogCyd3GjNzNye1vnDhAcCLwCJn4upNDo/Hvn7uYpISuG+AOn9yCO/F5h+ndtCyLBoNBuXDhwln9/f3zCSHy3bSU9m+KyZqbmyUhBMFgYMW8eQuQrVcSuJYsG7cczgW8kfV4S2PHc6M0CfSMAdOyJ6zncxcduDGTqmoIBgO5xVaO4+QC7uxoJkIITNOCYeg5CmMy4MdPM3yjzzvxue50IF03QMMBV/1xlHNz6PuCL168WInFYqcnEokN/8ihdn8XkDU1Ncm5N81lvzz3nimlZSWwLIMC7oIFrzfXrenJrMzpzZ2Pw7kxOc6zSOAwATuBoVswDLc1jXM3+Pb5fB6oVJimiZ6eHrz22nrs2bMH/X29yGT0catcCEKhIMrKyjF9+gzU1dWhtLQcwWAAgDvS3DQNOI7jZauHguFoiYT7KzfrNi0H1LARDPgOuQilt2aQSEw4d9lKwKxZs1BZWbmyo6Pj1mxj9f9JkGXnX2jfU7H0xGV+27ZBGYN0OChzx55PvvIB8ibiH4I3Gp47+XdCAKZhwrLc9jFN8yEUCoJzjr6+Xrz22nps3bYFHR3tMA0ThQUFqK2txWmnrURJSTGCwSAIIcjoOvoH+nFg/wGsW9eMhx9+CJRQRKNRVFZVo6amBpWV1SgpKUFeXp6359slYDkXXhxpeLVHkov/Dk+FUBi6BYVR+DT1sDHg2PkYF9OZJq2srERNTc0iKWVg/fr1R5po/e4GWRZgUkr/7DlzflpeVlWfTKZEfqyQAhKMwOOQslchnRBwv5nttEcFoxwbB+o4HIZuw7ZdvVgoGMTAQD/+9NAfsGXLVozGh1FeXo4FCxbg/eefj5n19ZgwlO8NXHZXVydaW/dgd2srXnzxBQwND4NzjkAggLy8PMRi+SjML0RxcTFi+fkoLi6Bqmoe7UEn8GoA4PcHMH6fUiZjuG5aZW5d1JuEls21s81aWTNu2zYNh8OYNn16+XNPPFdLCGm58MIL6fGq6/+bQNbY2MjWrFnDpZSB2bNn/3nR4mVnnXzKcrlv3z5SUzMVUnpTqCkm6cbeeqx1pC1plFGYpol4PI5EIg1Dt+A4DgKBAAaH+vGDH3wfDStX4uKLP4ITFp6AYCA44TVt2x7Hkx3qnqVwlYyMMVRVVaOqqhpnnHFG7jXiyQT6+nrR3d2Drq5ODPb3o6WlB5u3bEFhYQkuvfQyJJNJaJrP24E0NuyupKQEBQVFufflQiKd1hEK+8GUsSHt0qvBjlXLJkxZ5NOmT2Nc47MBtLxb4rI3CzK2du1aLqX0L1q05OFFi5acOX36dDuZSKiGrmPXrp2YMaN+bJODJOOmV+MtgetQMtRN53Rdx/DQMEZGRpFKZmBZNkzThKIo4MLBd76zBrfddhtOPunk3HMt284pIIhHrxzVRY/L17LlKIExXi2a5y4prZ9eP+F11r/yMn7607vgODZMUwfnjlvDlO5WN0op4vEEQqEwAoFALqGwbY50SkcoHICi0NzK5smRHSEkywrLSF4UpUWl9QO9A++WkOxNgYwyxnh9ff2i2tq675515jlnnnnmmc7WbZvVTDqFcF4UzzzzDCzLwkknnZjbVv1WwXVY2gJAOpNB/8AghoeGkRhNeVOgXd1aNBIF5w6abvo2vvzFL+Hkk06GYbnAo3JifPhWM9kx6mScJeRObuxAdiSnoihjDcjjMmpKGfLy8qBpfrdbSwjoug5VVXNuk1IK2xZIp0wEgz6oijIZXu7aHCGg6yYUxUeSyRRSKX0Q76LjjUDGGGO8vLzqE7Nnz79n3ry5NJVK897eXmXGjJlobW1FJpMBpQRPPfUkIpEQli5ZBFs4h2XWD5d9TVxzTXLqDF03kNF1JJMpJBJJOI5EJBL1vhgbBQUFGBoawHe/9y3ccMPn8P73vx+2bcNb9/LOkIrj/hbGWI76KCsrd8fIe1p/wSUccGiqDwG/H1wIELh/VzqdRjgcRnYyOKUMji2QThlQVXfKT9Z92o4A5y71IaVEOp0h69evh6KQnncTyNjRYrCdO3fy2bMXLF9wwvw/3/OL+0ApE9u2bWZCSgT8IZSUlMC0TOTlRUApwa7duyGFREVFJXw+zbva+SEM/JhkZkzQaFkWMhkdo/EERkcTSCRSSKUycBwBn8/nbp31Auvq6mps274VN9/yXfznV7+Cc889F7ZtT7Qqx7jwRuShZGk2ew4EAnjwwQcxfXq9OwvNkwYplMLn83uXlRvJc2+Qsaqq4+gPd+udw7l7czgsW8C2HViWnXO9zc3P8s2bXqejoyOj/f19jx482PauKC8dCWSkpaUFUkry85//4oFbb/1hRWlpGU9nUkpvbx/0jI6A349oLIZoLAq/349gMIDu7m7s3t2K3u5eGIaBkpJiEQ6HJSCJlIAQHLquwzQtWJaDTEZHKpVBMpFyb8kUUmndK4LLsYnQXoxEQFBSUoLf/e5+3P+7/8UPf/gDnHTiSTmAvd2d2UcD2dgssImHbVvw+/3YuHEjLIujsrISjmODEgruOO6cD0Vx+xC8bNHxgKZpaq6rfDJPmOXi/H4/dF3HU089iXXrnofP5yPd3V35v/3tb3/xq1/9yn43lJcOC7KGhgalvb2d//o3v7ni0ssu+/QFF3yID/QPKqVlRSguLsKBgwdgWhYKC/LBhQNdz8DvD8DnC6Cnpxv7D+yXA/0D8nf3/4529/aSwqJCdHb2oK+3H719fUinXXY+lUojndGhGyZsx4aQApQSr52Njk/fkZeXB0IJbr7lu+jr78EvfvFzVFdXw3LsN4y9DlfqecM48Q045OyaGU3zYeeunXjq6WcwODiAxYsXw7Ist9QlJQzTABccikI9HRkDIcgBLes2c70RnjJF09wWwvb2Njz+2GPYtnUzOOekurpaJpPJwt/+9n//1N/f393Y2MhaWlrkuw1kpK2tTba2Pup79tmt93/5y1/NZ0wBpYSEwz6UV5QhGo2go7MdvX298Ptdrf3w8AgCgQBisSi3LIu8/voGurtlx5efePLJ7f39Q6fU1NSK4eFhksm4i6xcQtNluLPAmmxC3HqiQFFREbZs2YJvf+ebWLH8ZHzn29+Gz+eDzZ2jcl+H9Ba8xZLV+ORgskBSSgFFUfHd730H9953Lyorq1FYWIhIJAqfz58rZ7lW2IHjOLnZY5xzWJYJXTekz+eXkUgEeXl50tuJgEQygY6OdmzY8CrWrXsBqVQCBQUFKCwsRE1NDe/r66V9fX3b+vr6XisuLqZtbW3HtctUDmPF2PPNzc4ZZ3zyfZ+48pppVZVT+PDIEMsLB8AUN6s7YcEJKC4qwiuvvIo9rfuQSaeRMQwYhi5VhbENr70qbNv60t4DB75/+eWXz23Z2fIffX19pLi4GFJKGIYBw3CVnmPNvmMLulzVqoVIXhSCAz/76Y+xbdsWfOubN+HEZSfmtP2MejMujmBq5DhZzVGJ4MPNKBCH3wKSnR6kKiq++KUvor29E1/64o2wLAvr17+ErVs3Y/r0GYjFCqCoSs7LGoYFKU13kB1jCARCcmiol9xyy3dJWWk5yivKybRp05BOZzA6Godlm3BsEwoDKiqqEArlwbJstLV1ENOyYVrmOYqi/PgfuTPpb7ZkbW1tYIzJ2tran9zwH1+eGolEpASn4ZB/bGOGBAry8zF1Sg3KykqQX5CP0rISuW37VvnnPz30SiQSvHj9+lfv55xTU4jp4WDgKje2yJD8/Fhuj7Yrd2Ze0ZnmrI2qqsjPz8fmLZtx2223oLKiHHfeeSdqptTAdGww5i1YkEdNBd963DVpScPhDiEENFXFl//zK+jq6sW//dv1GB2NIxwOo7e3B21tB6FqGtLpFPRMyj1n3rw0Silsy0Y6lZZDg/3kl/fcjQMH9n5moKf7O8+90FwajcZmqKomenp6aCKZgOAcRYVFiEbzYTsO4vFRJFNJ6jiCj46OzsoLR8Tw8NBzUsrjumNJOVzZqLy8fP6yZac01NfPQiIRZ6Gwz9W3jzv5lmXB5/dh3rx5qK+vl5Qx8uSTTzqapjU2N7/YOX36dN/evXvNwkgkqaqqrKgog57RsWtnCzSfH/n5+YjFYsjLcwlKny/gsuRCYHRkFD/96U8w0N+Lr331K1iyZGmOp1IYy05iOlLlyXNvEm/IB5OxX+eWYx3l8ZxzaJqGNd/6JtrbOnHddddjeHgEsVgMBQWFqK2tQzKZQDDgyq0Nw8CObduRTmegKKpXaSQik07jmWeeNDWFfnjXrtZHOee44IILvtXSsmN1KBgm2TJZNBpFKBwFYyqYoiASiaC3txeJRIJedNFF4uWXXrppZGTokZ6entdxHHeRT9AkrVmzhlJCEI1GP/m+81YzRWGcUjcI9Yay5r6ErNXxloVKPZNBZ3v7gcWLFw82NjayPXv2WADIddddtzs+OronPhonhmHw4eFhdHd3YefOFmza9Dp27dqFXbt2YdvWrTiwfz927tyBK6+8FFJYuP/+32LJkqVeOUjmMs2jgoFgQpvc0Q5xlKdPPhzHgaZpuPPHP8bmTVtx3XXXY2RkNHexOI6NurppqK6e4oosuYBhmNA0DbFYFIQIpFNJ3tvbTZ9rfoZGY5HLNm7e/OjMmTO1hoYG5Y9//OPrHe3t20dGhujM+hl8zuzZKCstg2U7oMztI+jo6EA8Eccpp5xELmq8UP7gB9+nNTU1d//+979nb2CAjxuQEQDO1ddcE6yqqvrA4sVLkEymqKYpUDWGsWZWeUjTg6Zporm5GTt27Hj417/+tbF27VriLVZnF110kRWPx2969dVXUVFRRaZUT0VVZRXy8wsQ8Ae8bIuAUYJ0KoWDBw/iU5/6DEzDxs0333woO38sncKbKcp7Fszn8+Ghhx7CQ3/8Ez772f/A6OgoIpEIolGXIHbjrADmz18Azjna2trg0zQEAkHYto3CwiKHMcY2bdqYKSoquPDll19e29DQoLS0tFglJSWSEOIUFBR8a2BwED7Nh/a2dnR1dcJxLHR0dGL9y+vR19eH9733XFx88cdQUFDAqqunOFdfffXSG2644TOEEHG8ChnJePJ17dq1fNq0ae//+Mcv/dMXv/RVMTw0QkMhDXl5gdxDJwPM06CLSy65BC+//PLC/fv3b2scm/pHvMexpUuX7jt1ZUM1pVRqmo+GwxFEIxFEwnkIBAOglGDP3r2I5efjtNMakBcO47vf+TaqplTgxq99DZZlvWkVxZuiJw6N5o8Yg6mqim07tuGTn/wUvvylG+HzafD7/SgoKABjDMFgEIwxpNNpSCnR39+H1157FalUCuWlFQCkfP31jeTV19bvrqurveyhhx56FYduCKGKwsT8+YueP/OMM1fmRfJ4JpNiumnBNm3UTJmClaetwAnz58Pv98OybVBGBeccH/7wh0fi8ficl19+ecAr0cnj0pJ51geKop2/YvlpknMuKHMbdI9khTnnCAaDzgsvvEBfeeWVP7S3t28DMF5+Ir3ap5NMJn/Z1tZGqquqRVlZGQoK8mGaJvbt34f29jZs37EVkUgIy5YtheM4iMcTuO22H2Lf3v244447oGlajlt6o3rkhLkbbyAvmjxe4HA11Uwmg8/f8AV87KOXIRRyNWj5+flglELTXMBpmpYrfpeWlmHFipWoq5suu7u7xZ///Cfx6muv3H3jjdctf+ihh17Nrgia/HZf+9qNtLS02Ld06TIUFxeT+vpZOOP003HFlZfisssvwYknLs2dB+JugKPBYFBeeeWVhV1dXZ8lhEhCCD1e3SUB4FxzzTVqRWVVQ/3MOSSd0qnC1FxTyCFfmJQg1N3ffOePf2zG4/GvOY5D0DTxDZqamqQQgpx77rl39/Z0xwmh1DR0MTI8CJ9PgaJQdHS2o7CoGMtOPAnBoFvX8/sDGBlN4Nbv347HHn8Kjz/+BDRNy6kj3hBsk/0qGRtdQDyKgkgcNUPNFsCbmpowa9Y8LDzhBGQyGRdgjEFRVISCwVys6PP5EAqFIKVEXl4Eqxoa5IGDe+nmLRsv2rlzx6cuuuia4cbGRnZoQ67MRpEKIIuXnbQMp648jZxxxpk49z3nYNnSxSgqKoTjcAgpcutvFEWBYRh09erVcvHixZ9esWJFMQAhpSTHHciampoIADz88MPzZ8+aOT0Wy5e2bVGm0Aks+XjW3HYcBANB/v9++7/s5fUv/XB4eHgvAIo1E+PpNWvWiMbGRnrnnXf2ZTKJf3/22adoLBaTpmmiu7sb0WgEZ511NpYvPxXBYBi2bcPv9yMUDgDEbfC4/fYf4fbbb0dXVycU9ibLRxKHZffJYQlbcsRM8pFHHsGuXXvQeGEjRkZHUFhYiEDAJaB9AT+YN8F7TJzoRyAQQCgUFKZlku6urvZrr732z7Zts6ampiOIDN349Vvf+pbV29vb0t8/IKdMqeGBQBCOzWEa1lgz86S/h3NOAoEAv/TSS/Pb29sv96wZO55Alv0wrL29XQRCoQ9cfPFlqxeesIjrhk5DQdWVn2Rrat43x4WAP+AX7e0d7PM3fP7gJ674xMVPPPGEc6Sw3Ct7sMHB4c2OY1dEo/nLlp14Ep9SM5XOnjMXpaVloN7YqVAo5Mmic506KC0pRUFBAX76k5/ggg9e4O2ppEdPpUhulOIEu3a40RlZbT289jYhJRil6B8YxA03fB7XfvLTIJQiGAwiFosBgLu4IRgY94LeueECqqrKcDgsvv3tb7KdO3dc/cADD2xvbGykP/3pT8VRBAm0paVFEkKGVNV36ZlnnCnj8SQVQkDVVJd4hsxVSeBNBXdH10vU1tbhueeem15RUfHztra246qmSQEgyxqXFBefUl8/E45te+6ATezMAbwJOVIyysTXv/F1mLZxzVe+8pVkY2PjUfXmDQ0NhHNODMN4XlFVkZ9fJIPBEPz+AISXQIwBbOxNFUXB4NAg3nfeahSVlOJnP/sZVEXNzbGYMCpqvHXK7beSE5aTkiONGvZAmWX0GWP4+te/gaVLT0ZhURGklIjFYjnG3ufz5VbtZN+bcwFFUWUgEBA33vhV5dnnnvl6a2vrH6SUbzj+3BOF0r6+vscfffTPj23a9DqLxWLcNG1k0qarPB4fS2YdBgEsy6KhYFCcd955dQcPHvwQIUQ2NDSw4y0m44QQFBYVzqusrIJuGJTRrJKUTCArHYcjFAg6t972feWF5ue/tXP7zqfezEn0pmVLn8+XTsTjVFUVxONx9PT0wDRNUEpzcysmZ7GqqqJ/YAA3fP6L+Msjf8XevXugMiUHtMk0RzaWn+BVs+OljkquAY7tQFUUPPyXR3DgQBvec865GBkZQTQagaa58iW/359bdDGeR8vLC3MpObnhhs+y5uee/trB/fu/7TiOgje5fqapqQlCCITD2g033/w9wzQMUMqkadrQDWtiVjx2XYB5qtnzzjtPVlRUXEMIwfHUzUTdC5zIurpYJBqJVkbyIuDcJooycS+2q4ZwkBcMOX955C/qz++6+089PT3fcByHvRmm2QMhfeqppx576eUXX3799Y1KSUmxk8lkMDQ0lOsYz2QyueLyeOGj4BzhUAhXXXU1vvvd7+VGHBy+8Vd6fxqd0E6HIwopCSQouMPh97mtavfd+0t89KMfhWkZCIfDCATc9c7Uyyizwb4Qru6rqKjY2b9/P7v22qvTr6x/6eI9e/Z817btt7TI1Itf2Wuvbdm5adPGr//8F3exgsICzjmHrpswTMcVy45fSSgBSijS6TSbOnUqFi1aeEpFReF0AMLr9D8uQEallGTv3mHi8/sZUyhAJFRNnfBFO46DcCjE17/6ivKf//nVzZ/73OcusSyLymzL9Zu8Umtra40Vy0+56Ne//u/2HTt2KNFovpNMJjE4OJgrnGcyeu4LzVooRVEwMjKK971vNXy+IB599K9QVfWI2WY2RibejqVDJjJN0G65szY0VcPg4AC+/vUbEYnEUD+jHkII5OXl5SxtdlZHdsYZY4osKCjga3//e+XKK6/Y2nbwwGmtra2/9SzYWx7rtHbtWiGEYH19fd//9f/c99fnn39GKSos4rbtIJO2YFt83D6DQ8wxP/fc9/o0Le/DAMFzzz13fICMUsIZY/KrX/1csLu7hw4ODEvGJn55juMgFArx7dt3sM9d/x+dixYu/MB1112XampqekvE35o1a0RTUxO95557OmdMrzvz7rt+2rZlyyYlFst3UqkUBgcHkclkoOs6Uqk0bNuZEL8qioJkMonPfObf8Jv/+U3OzU7OfokrNc3Njs0OLZ7oUmUONJqiwq9peOihP+H88y9Aa+sBnHnm2dB1HdFoNLekPvtc13rZKCoqcizLIF+/8WvspptuvO+CD5y8Yvv27a8LId7OKmbZ1NQkbdsmxUVFV3z322u6OjrbWSgYEZZpI52x4XB5CMYYY+Cck1NOOQV1dXUfklIcNwPy2NKly/4wc+bM6zZt3vG5ufPmVUyprkVxSRHRNAU+Tc0CzNmxY4dy9dVXd3JOz3r88Uf3NzY2sqNlS0c6mpubJQDW0tIytGpVwwMPP/zwyuKS4qr6GTPtZDLJsiPGx08qdEcfuLPALMtCbe1UbN++DV3dXVi0aJHXXEIPsVRHGq6S5b8YY0gmk3jllVdw//2/w913/wKnn3E2Zs6cDU1TkR8rRDAYgM/nyyUXjsMRjUZFXl5YPv74Y+zrX/9a1+uvv/bpzs6Obz/99HrLExG+rS+3ublZNjY2sieeeCJVVla8acOGDZe9973nSUIocRxBXKUKy02OzP69lmWRWCxGXnzxxfxPfOIT9xmGkfS81T+0AsB+dtcvrjn33Pfln3pqw2zTtERb20FaUJCPUDAEITgikQh/+eWXleuvv77Dtu2zN258dfdpp52mPProo2/nRMrGxkb2+9//fvSLX/z8H+699955mqbNmj93gZNKp4iu6yTrIrOD7MaDRtcNVE+pxd13/Qznn78amqYdsfs8e//YjAy3TNTfP4Cb/+tm/Pzn92Dv3n2wLY4TTzwZoXAYXZ2dCIfDyM+PIRgMg1EFnAsEAkERjURF655Wdsst3yO/+u9f/k9xcVHjK6+88rIXm6KlpeWYBNwe7aP09vbvT6TinV1d3Recf/4HuGEYlHMBKSQ0jU1oABZCEE3TxIEDB7Qnn3zyOcuyWhsaGtg/WtTI7v3lfYumTZv663g8vrq7p1t1HBuDgwPkwIED6Ozo4r/5zf+wO+6444VZs2atfvzxx/dLKVlbWxs/FiexsbGR3XHHHZmhocHfX3vtteXx+Miy+QsWSkDKdDpNvOJ7TlqUHSWVSCRQWFiEXbt2YHh46IjWbHKQ71owFevWvYhPffrfUFxShtXnvR9nnfUeLFh4AgYHB+A4NkpLS2HbNoaHh1EQK0BBQQGPxvLkwEA/+3//+z/0zjt/uL51964r29rabtu9e3cK79wCUyGlVDLpzMb+vt6AY1unnX3OOU4qlaJCSggpoarKBGutqiofHBykzz///NaRkZEXp06d+g9XzirBoO8GANi0ZdsPorHoN+KjcTMUCPqCoZCzefNm5f7f3b+lre3g6d74yGN6MteuXcubmpooIYQrivLJp5+zWnsHem+94vKrEYtFeSIRZ5xz5Ofnw+/351YsA0A6ncLZ55yLxx9/FJdffvkRMkzpTrmG+zyFMWzdthXfaLoJn7r2M6iqqoLjCAguQSmQlxeBbpooLinF0OAg2trauW1vpHv372H79u7GunUv7Ozu6/3u/j17/h+lVHpiQYF3dkMudxxH6e7p/srP7vpxJL+g4NNXX/1Ju7unT4VBAJgIhXyg45K0YMAPlbHjhidTnn32WWXVqlVIpfCTRGL0I8lEfGZnZwds21Yef+KvmXnz5n6GEMLfqSG4a9asEQCI4zisq6Pr+z6/b+cPf3DrLy67/IryWbPnOPHROLMsi0SjUYRCoVwrmVuILsXIyEg2g/E6tifVlcbtHBFS4tZbb8OFF16EispKcMFRUFAIISRUn4JYfj7aOjuh6zpCoQB0Pc0effQl9PX3PEuB/3n00Ufvr6mp0T1A/73WL0sA3LZt1tvb+5nbb7+tWFW1Cy+59Aq7v7dPzY6Pz04JAkDKyiuRlxd9n5TyFkKIyPYOjK+seQ0F+HvEa/T00093brrpJpGXR/oXzJv33rPOPuv+qbVT4n986MHeQMD3vr/+9a8vHb6oe+xPJOdc2bt77yO2PXryHXf+6OnH/vqo4vf7wJgiBvoH0dvbi2QyCcdxGzMYYwiFwrjppjXegGAHh6gV3V48qEzB3r17kEqlMX16PUxTR0FBASgjYAoD5wJVVdWYN3s2ysrK5NNPPy3++OAf/peAn7F/794ztm/fft+UKVN0z3oBf9/93lJKKW688Uba2rr749/9r28//Kv/vlctLS21hZAwLI5U2gDnEoZps1A4ymfNnbdi6dKTLgcgVq1axQBIr64pvJscRygq7ySnRsb9FVmhIZqams598sknr1u/fv3qt5mO/631VC6lZPX19d+YNn3GVy+88CNKbW0dz2QyBADNFqi7u7tQXFyMW2+5Gd/8ZhNOPfVUmKYOSunYZB3pDjdRVRXPPPMMfvWr3+CSS133Wl5eDi7cTm9VUWBaJgzDkIWFhbj11lvkhtdenvXKK6/sAaA0NjZKbxDwPzJTy1ohZfbs2Q9cf/0Xzr/iiquceDLOuMMJpcDQ0CC2btkm+gf6yG9/95tdmzdumGNZNgEQBRAc950LAMMAzHF8aNb9H9O/URkXIEspJbvppptkb2/vLk3TCjjnlBDy954TzwFQQohgjDVJJv96x50//NGK5aeeeNrKVQiHwzKVTJGBwQEoCoNtO5haW4v//d//xcknnwyfL5B7Ids23R2V3inTNNVrqCVjvY7e5MRA0A/Np0FKEFVVRSgUonsOHJja2Ni4H4A8TkY0SS+GdaSUH545c/ZdBw8euLJh5SopAQwND+Pgwf0IBEJ0Rv10lJeWzx6trX1y3rz5ZfmxWGk4HA5m+TTTNMXw6Ohgb3f3vo6OjmeFEA90dnbuyg4RfEcs2bif5a233lpy//3331NXV/fBf+DJJd6V5Ugp1erq6guj0YL/PPc9751fXFwibdsm+YUFGBkZQTweR2dnOwqLYvBpGqbPmI7TTl2JuXPnAQAMw4DP58Pu3bvxne98D5dcekXOkrng03KsvmVZyM+Pif/63nfpT37y0zPi8aFnG4+//d7Eq+nKsrLKy6qrKu8+86z3aal0gkQiEVJTUwtAwDQycvnyk8nM+hnw+f2HvIjNHQwMDOD111/Hgw88aG7dtOXeRx979EulpaXpSYHtsbFk44/+/n7dMAx9//799O8ce0yO0xzPqjkAfnvCCfXPr3vx+dcu+fjlZcFgUPYP9BNN07By5UrU188EpMTgUD82vLYBt932Q6iqho9+9CM4/fRVAICKigrYto14PIG8vDBM04R/3MnPZq6UMmI7jozF8vV4fAjH4SEBENu2le7ujl/HYqEPppKjF0ytq+OZTIbF43GoKsOypYvJggXzuW1ZxDAMMqH85gofZVlZuVz9vvPk6vedp937y//+9DnnvDcmpfy4p7A9Jt/9YYO9eDxOCSF0yZIlx8MJFYA7OuELX/h6HwEdyc/PJ0VFhXLxkiV4z3veg2nTpoE7DsJ5YcyaNRdXXf1J3PaDO/CRj34cf/jDA7j++n9HZ1eX1/gRQUd7OwhxrVZ2ipBt2+PCU0HiiVGrr6+zmxCSW4V9vAGtsbFRcs5ZTU3tf65/5SVjZGSUCiEkI8CypYuxaNECmKbJhJSUUkoYY2M3QgmRoKaps5SeUTIZQ1551RV8/ry5HykrK6vJhi3HBGTjpbpZpOfn5+dHIpHiu++++7jY29PY2Eibm5ud66//9Al1dXVzpk+vl1XVNbS8vNzTvSnIi4S9akAGIyPDSKVSWLx4MX54+x049dTTcfnlV2H9qxtwzrnvxa7du6FpGmzbytVmsyCjlCKdTmNocHAgPz9/0KNZjsvG2bVr1/LGxkY8+uijuxzJr969e4dcfd5q+dGPXoQlSxZNKK8dagjhdYkpYERBMpkmus5pOC9CRkZGtGO505wersC9Y8cOv2VZI4wxeazQfCyOzs4+fzAcQsZIw3E4pCDeuj4NUlJvCZc7M0xRFGQyGfT19ePsc96Drzc14aY130QqmYQUjsxkMjB0C5bpANKdcM05h9/vF319feju6jzQ19eXkVL+w2t/b2jqhSDdHR3bqquqSF1dHVE1DUJ4I+TJuE0DREISmVPVciFhmjaGh+OIxQqd7Tu2k42vv7799dd/c9AzPuIYWbKuoJSSSCnJRRddRL2reRohJOHFKMcNyMqKihzTMKVlW9D1jDt7lQt35FQyDUM3YFlmzjJlR6K3t7ehuKgEX7/xG3j8sceRTMZJ28GD4FwinU7nXGcqlQClVO7cuROd7e3PjtvvfbwfklKqZYv4ad3lzAgdW8Ho3iikJHAcCcOwMTqaQjKpy5KSYmfj6xvUL33x8wP5sbxPzJ//ESvb93FMQNbVjbs9a0ayg25t227w+/17vVjoH34GszHRrHnzDgwODaQdx0EiEZe6nsmZfSE4DNNEOp1BKpVCMplEIpFAIpFwx5obOiorKnHe6vPR1dWdfH3TRkkJkel0OteylMkYSKWSbN0LzVI3zT9LKdHY2HhcW7HsEq/Zsyv372jZkdBNSzqOFMlUBrYj4Dgcjs1hWxxGxkIqmcHISBx6xhLRaL4jOCc/uv125dprr3oxnU6c+uSTT26UUlKvEnNsQBaNFl7S2dn7fkKIKCkpoYwxJBKJk2Kx2J+AsRXQ/8jD+4PZn/70p/72zrY/7du7l4TCIburqxPxxCgMIwPD1GHbJizLgq7r3pgmK6e4dWwbup6xo9EYl4Q8uX37tsc7utoIZczRdR0AEAgE+cEDB+Urr7y8YWBg4HUA5F0wwlwCYE899erwjpYdd/3ynl/Q6upix7GFGBlOYHQkhZGRJEZGEkgmM1JhPp6fX8z1jE5/9atfKldddVn/z39+91e3bd3S8Nprr7WOq8ceO75FSrk7kcwokbzgfEJI5rzzzrtmaGjogldeeeU87w2Pj5Pc1ESxZo08++yzp6bT+oarrrq2oLa2zjEsnXLO3R2nlJJsoOut35GEEKmqqlQUhaSSKXrvvb9ET0/7hwMBtgPEv+tzn/2CiEZjMhqLkLy8iFhzU5Py+muvXLhp66YHjkN+7Gi8GZFSsvrp9fdd9okrP371VdciEo1IIYR0x2cJous6aW3djaeefhLNzz17YN++ffeefvqye37zmwd7PRL2HRnaQr71rW8PnL/6/IPJVOKrt9562/yurs5rpk+ftvp3v/vdgaamJhxLs/n2cdZEv/nNb4pTTjllqW2JXy1cvHjO3LlzUFpaBr/f70699iYcZi1ZOpVC/8AA2tsOYmfLji7H5re/umH99x3HRv30mdfOnjvvro989GMoLSnFX/7yZzz62F9/tH9v6+csy3pXrfvLEumapmLKlJrPTJ1a+9nly1fUV1ZWwbIsdLR3oHVPa397+4FnB3p6fvvlr33y6euv/1bKi7vfkXJS7oMtWrLkJuE4q4qKiqfout46f/68f7/77rv34PhdqUIJgejt3R4+/fSLGiml50SjsXnBYKCSUuoDIIWQRAjO0+lMj21bXaZptliW9cKHPvShp26++eYhKSVpbGykDzzwAF+yZMlFAPksIYjYtv2b7du33WzbDjmWjPffuxJACJEXXnhaeNOm9tMzKb3aEYL7fL4DM2bM2NLc3Nw3TkquSCn5Oz074/8DUiQ1jL/lraAAAAAASUVORK5CYII=";
+
+/* ---------------------------------------------------------------------------
+   Message pools — random selection gives variety across runs
+   --------------------------------------------------------------------------- */
+const MASCOT_MESSAGES = {
+
+  // Playground states
+  idle: [
+    "Write some Python and hit Run — I'll keep an eye on things.",
+    "Type some code above and let's see what happens!",
+    "Ready when you are — try typing <code>print(\"hello\")</code> to start.",
+  ],
+  success: [
+    "Clean run! Try tweaking a value and running again.",
+    "No errors — nice work! What happens if you change something?",
+    "Looks good! Experiment by modifying the code.",
+    "That ran perfectly. Want to try something different?",
+  ],
+  noOutput: [
+    "The code ran fine, but I didn't see any output… did you forget <code>print()</code>?",
+    "Hmm, no output appeared. Remember: Python only shows results if you use <code>print()</code>.",
+    "Silent run! Add a <code>print()</code> statement to see results.",
+  ],
+
+  // Error-specific messages
+  nameError: [
+    "Ruff! That name doesn't exist. Check your spelling — Python is case-sensitive!",
+    "Can't find that variable. Did you define it first? Capitalization matters!",
+    "NameError usually means a typo. Double-check upper vs. lowercase.",
+  ],
+  typeError: [
+    "You're mixing types! Try using <code>str()</code> or <code>int()</code> to convert.",
+    "Python won't mix text and numbers on its own — you need to convert first.",
+    "Type mismatch! Remember: <code>\"5\" + 3</code> won't work, but <code>int(\"5\") + 3</code> will.",
+  ],
+  syntaxError: [
+    "Something looks off — missing a colon, quote, or parenthesis maybe?",
+    "Python can't read that line. Check for missing <code>:</code> or unmatched quotes.",
+    "Syntax issue! Look at the line number — usually a small typo.",
+  ],
+  indentError: [
+    "Indentation matters in Python! Lines inside <code>for</code>/<code>if</code> need 4 spaces.",
+    "Python uses spaces to know what's inside a block. Indent with 4 spaces.",
+    "Check your spacing — everything inside a loop or if-statement needs to be indented.",
+  ],
+  indexError: [
+    "That index is out of range! Remember: lists start counting at 0.",
+    "Off by one? The last valid index is <code>len(list) - 1</code>.",
+    "IndexError — you're reaching past the end of the list.",
+  ],
+  keyError: [
+    "That key doesn't exist in the dictionary. Check your spelling!",
+    "KeyError means the dictionary doesn't have that key. Use <code>.get()</code> to be safe.",
+  ],
+  timeout: [
+    "Whoa, that ran too long! Got an infinite loop? Check your <code>while</code> condition.",
+    "I had to stop your code — it ran over 5 seconds. Probably an infinite loop!",
+  ],
+  genericError: [
+    "Something went wrong — read the error message, it usually tells you exactly what.",
+    "Error! The message below has clues. Read it carefully.",
+  ],
+
+  // Challenge coach
+  challengeFirst: [
+    "First one down! The hardest part was starting.",
+  ],
+  challengeMid: [
+    "You're building real skills — keep going!",
+    "Solid progress! Each one makes the next easier.",
+  ],
+  challengeHalf: [
+    "Halfway there! You're getting the hang of this.",
+  ],
+  challengeDone: [
+    "You crushed it! You're ready for the guided lab.",
+  ],
+};
+
+/* ---------------------------------------------------------------------------
+   Helpers
+   --------------------------------------------------------------------------- */
+
+/**
+ * Pick a random message from a category pool.
+ */
+function pickMascot(category) {
+  const pool = MASCOT_MESSAGES[category] || MASCOT_MESSAGES.genericError;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+/**
+ * Generate HTML for the mascot speech-bubble strip (playground/challenges).
+ */
+function mascotHtml(message, extraClass) {
+  return (
+    `<div class="mascot-strip ${extraClass || ""}">` +
+    `<img class="mascot-img" src="${MASCOT_IMG}" alt="PyBuddy">` +
+    `<div class="mascot-bubble">${message}</div></div>`
+  );
+}
+
+/**
+ * Determine which message category fits a Skulpt error string.
+ */
+function errorToMascotCategory(errorText) {
+  if (errorText.includes("NameError")) return "nameError";
+  if (errorText.includes("TypeError")) return "typeError";
+  if (errorText.includes("IndentationError")) return "indentError";
+  if (errorText.includes("SyntaxError")) return "syntaxError";
+  if (errorText.includes("IndexError")) return "indexError";
+  if (errorText.includes("KeyError")) return "keyError";
+  if (errorText.includes("TimeLimitError") || errorText.includes("ExecLimit")) return "timeout";
+  return "genericError";
+}
+
+
+// ── js/state.js ──
+/* ==========================================================================
+   state.js — Centralized application state + localStorage (no dependencies)
+   ========================================================================== */
+
+const STORAGE_PREFIX = "pyWorkshop_";
+
+/* ---------------------------------------------------------------------------
+   State object — single source of truth
+   --------------------------------------------------------------------------- */
+const AppState = {
+  // Navigation
+  currentTab: "learn",
+  currentLesson: 0,
+  visitedLessons: new Set(),
+  completedChallenges: new Set(),
+
+  // Challenges
+  activeTier: "all",
+  activeChallenge: null,
+
+  // Engine
+  engineMode: "loading",   // "loading" | "skulpt" | "fallback"
+  engineReady: false,
+  outputBuffer: [],
+};
+
+/* ---------------------------------------------------------------------------
+   Constants
+   --------------------------------------------------------------------------- */
+const ENGINE_TIMEOUT = 5000;   // 5 seconds
+const OUTPUT_LINE_CAP = 100;
+
+/* ---------------------------------------------------------------------------
+   Persistence
+   --------------------------------------------------------------------------- */
+
+function saveProgress() {
+  try {
+    localStorage.setItem(
+      STORAGE_PREFIX + "visited",
+      JSON.stringify([...AppState.visitedLessons])
+    );
+    localStorage.setItem(
+      STORAGE_PREFIX + "completed",
+      JSON.stringify([...AppState.completedChallenges])
+    );
+    localStorage.setItem(
+      STORAGE_PREFIX + "lastLesson",
+      AppState.currentLesson.toString()
+    );
+  } catch (e) {
+    // localStorage unavailable (private browsing, etc.) — fail silently
+  }
+}
+
+function loadProgress() {
+  try {
+    const visited = localStorage.getItem(STORAGE_PREFIX + "visited");
+    const completed = localStorage.getItem(STORAGE_PREFIX + "completed");
+    const lastLesson = localStorage.getItem(STORAGE_PREFIX + "lastLesson");
+
+    if (visited) AppState.visitedLessons = new Set(JSON.parse(visited));
+    if (completed) AppState.completedChallenges = new Set(JSON.parse(completed));
+    if (lastLesson) AppState.currentLesson = parseInt(lastLesson) || 0;
+  } catch (e) {
+    // Corrupt or unavailable — start fresh
+  }
+}
+
+function resetProgress() {
+  if (!confirm("Reset all progress? This clears visited lessons and completed challenges.")) {
+    return;
+  }
+
+  AppState.visitedLessons.clear();
+  AppState.completedChallenges.clear();
+  AppState.currentLesson = 0;
+
+  try {
+    localStorage.removeItem(STORAGE_PREFIX + "visited");
+    localStorage.removeItem(STORAGE_PREFIX + "completed");
+    localStorage.removeItem(STORAGE_PREFIX + "lastLesson");
+  } catch (e) {}
+
+  renderCurrentTab();
+}
+
+
+// ── js/data/lessons.js ──
+/* ==========================================================================
+   data/lessons.js — Lesson content array (pure data, no logic)
+   ========================================================================== */
+
+const LESSONS = [
+  {
+    id: "variables",
+    title: "Variables & Assignment",
+    number: 1,
+    nlpConnection: "Storing company names, transaction amounts, flags",
+    body: [
+      { type: "text", content: `Think of a <strong>variable</strong> as a labeled box where you store a piece of data. You pick the name, Python stores the value. In NLP and fraud detection, we constantly store things — a company name, a transaction amount, a flag for suspicious activity.` },
+      { type: "text", content: `The <code>=</code> sign in Python means <strong>assignment</strong> — "put this value into this box." It does <em>not</em> mean "equals" in the math sense.` },
+      { type: "code",
+        code: `company = "Enron"\ntransaction_amount = 45000.00\nis_suspicious = True\n\nprint(company)\nprint(transaction_amount)\nprint(is_suspicious)`,
+        output: `Enron\n45000.0\nTrue` },
+      { type: "concept", content: `Variable names matter! <code>transaction_amount</code> is much clearer than <code>x</code>. In professional code (and in this course), always name variables so a reader instantly knows what data they hold.` },
+      { type: "text", content: `You can <strong>reassign</strong> a variable at any time — the box just gets new contents. The old value is gone.` },
+      { type: "code",
+        code: `status = "under review"\nprint(status)\n\nstatus = "flagged"\nprint(status)`,
+        output: `under review\nflagged` },
+      { type: "text", content: `You can also use one variable to create another. Python evaluates the right side of <code>=</code> first, then stores the result.` },
+      { type: "code",
+        code: `base_amount = 1000\ntax = base_amount * 0.08\ntotal = base_amount + tax\n\nprint(total)`,
+        output: `1080.0` },
+      { type: "warning", content: `Python is <strong>case-sensitive</strong>. <code>Name</code>, <code>name</code>, and <code>NAME</code> are three different variables. This is the #1 beginner mistake — if you get a <code>NameError</code>, check your capitalization first!` },
+      { type: "try", content: `Create a variable called <code>reviewer_name</code> and set it to your name. Then create <code>rating</code> and set it to a number from 1–5. Print both. Then change <code>rating</code> to a different number and print it again.` },
+      { type: "mascot", content: `You just stored your first pieces of data — that's exactly what every NLP tool does behind the scenes. When you see <code>text = "some sentence"</code> in the guided lab, you'll know exactly what's happening!` },
+    ]
+  },
+
+  {
+    id: "data-types",
+    title: "Data Types",
+    number: 2,
+    nlpConnection: "Why NLP converts text (str) to numbers (float)",
+    body: [
+      { type: "text", content: `Every value in Python has a <strong>type</strong> — it tells Python what kind of data it is and what you can do with it. The four types you'll use most in this course are: <code>str</code> (text), <code>int</code> (whole numbers), <code>float</code> (decimal numbers), and <code>bool</code> (True/False).` },
+      { type: "code",
+        code: `company = "Enron"          # str  — text\nyear = 2001                # int  — whole number\nloss = 74000000000.00      # float — decimal\nfraudulent = True          # bool — True or False\n\nprint(type(company))\nprint(type(year))\nprint(type(loss))\nprint(type(fraudulent))`,
+        output: `<class 'str'>\n<class 'int'>\n<class 'float'>\n<class 'bool'>` },
+      { type: "concept", content: `Why do types matter for NLP? Computers can't do math on text. Sentiment analysis works by converting words (<code>str</code>) into numbers (<code>float</code>) — that's the entire foundation of NLP: turning language into math.` },
+      { type: "text", content: `You can check any value's type with the <code>type()</code> function. And you can <strong>convert</strong> between types using <code>str()</code>, <code>int()</code>, and <code>float()</code>.` },
+      { type: "code",
+        code: `score = "85"\nprint(type(score))       # It's a string!\n\nscore_num = int(score)   # Convert to integer\nprint(type(score_num))   # Now it's an int\nprint(score_num + 10)    # Now math works`,
+        output: `<class 'str'>\n<class 'int'>\n95` },
+      { type: "warning", content: `You can't add a string and a number directly. <code>"Score: " + 85</code> causes a <code>TypeError</code>. You need <code>"Score: " + str(85)</code>. This comes up constantly when building output messages.` },
+      { type: "try", content: `Create a variable <code>age</code> as a string: <code>age = "22"</code>. Try printing <code>age + 10</code> — what happens? Then convert it to an integer first and try again.` },
+    ]
+  },
+
+  {
+    id: "strings",
+    title: "Strings & Text",
+    number: 3,
+    nlpConnection: "Text preprocessing is the first NLP pipeline step",
+    body: [
+      { type: "text", content: `Strings are the <strong>most important data type in NLP</strong> — because all language is text. Before any AI model can analyze text, the text needs to be cleaned and standardized. This cleaning process is called <strong>preprocessing</strong>, and Python's built-in string methods are the tools for doing it.` },
+      { type: "code",
+        code: `message = "  URGENT: Transfer $50,000 NOW!  "\n\n# Remove extra whitespace from both ends\ncleaned = message.strip()\nprint(cleaned)\n\n# Convert to lowercase (standardization)\nlowered = cleaned.lower()\nprint(lowered)`,
+        output: `URGENT: Transfer $50,000 NOW!\nurgent: transfer $50,000 now!` },
+      { type: "concept", content: `Why lowercase everything? Because to a computer, "Urgent", "URGENT", and "urgent" are three completely different strings. Lowercasing ensures the word is recognized the same way every time. This is step #1 in nearly every NLP pipeline.` },
+      { type: "text", content: `The <code>.split()</code> method breaks a string into a <strong>list of words</strong> — this is essentially what tokenization does in NLP (you'll use <code>word_tokenize()</code> in the guided lab, which is a smarter version of this).` },
+      { type: "code",
+        code: `sentence = "the company filed for bankruptcy"\nwords = sentence.split()\nprint(words)\nprint(len(words))`,
+        output: `['the', 'company', 'filed', 'for', 'bankruptcy']\n5` },
+      { type: "text", content: `Other useful string methods include <code>.replace()</code> to swap text, <code>.startswith()</code> / <code>.endswith()</code> to check beginnings and endings, and <code>.count()</code> to count occurrences.` },
+      { type: "code",
+        code: `email = "user@enron.com"\nprint(email.endswith(".com"))    # True\nprint(email.startswith("admin")) # False\n\ntext = "fraud fraud fraud alert"\nprint(text.count("fraud"))       # 3\n\ncleaned = text.replace("fraud", "****")\nprint(cleaned)`,
+        output: `True\nFalse\n3\n**** **** **** alert` },
+      { type: "try", content: `Take the string <code>"  Hello, World!  HELLO  "</code>. Strip it, lowercase it, and split it into words. How many words does Python find? Print the result of each step.` },
+      { type: "mascot", content: `You just did <strong>text preprocessing</strong> by hand — strip, lowercase, split. That three-step combo is literally step #1 in every NLP pipeline. The guided lab's <code>word_tokenize()</code> is a fancier version of what you just did with <code>.split()</code>!` },
+    ]
+  },
+
+  {
+    id: "lists",
+    title: "Lists",
+    number: 4,
+    nlpConnection: "Tokenized words are lists; scores are lists",
+    body: [
+      { type: "text", content: `A <strong>list</strong> is an ordered collection of items. In NLP, lists are everywhere: a tokenized sentence is a list of words, a set of sentiment scores is a list of numbers, a batch of reviews is a list of strings. If you understand lists, you can read most NLP output.` },
+      { type: "code",
+        code: `# A list of words (like tokenized output)\ntokens = ["the", "company", "filed", "for", "bankruptcy"]\nprint(tokens)\nprint(len(tokens))`,
+        output: `['the', 'company', 'filed', 'for', 'bankruptcy']\n5` },
+      { type: "text", content: `Every item in a list has an <strong>index</strong> — its position number. Python starts counting at <strong>0</strong>, not 1. This trips up every beginner, so let's make it stick:` },
+      { type: "code",
+        code: `tokens = ["the", "company", "filed", "for", "bankruptcy"]\n#  index:    0        1        2      3        4\n\nprint(tokens[0])     # First item\nprint(tokens[2])     # Third item\nprint(tokens[-1])    # Last item (negative = from end)`,
+        output: `the\nfiled\nbankruptcy` },
+      { type: "concept", content: `Zero-based indexing is universal in programming, not just Python. When you see <code>tokens[0]</code> in the guided lab, it means "the first token." <code>tokens[-1]</code> means "the last one." These patterns appear in every NLP workflow.` },
+      { type: "text", content: `Lists are <strong>mutable</strong> — you can add, remove, and change items after creation.` },
+      { type: "code",
+        code: `flagged_companies = ["Enron", "WorldCom"]\n\n# Add to end\nflagged_companies.append("Tyco")\nprint(flagged_companies)\n\n# Change by index\nflagged_companies[1] = "Lehman Brothers"\nprint(flagged_companies)\n\n# Check membership\nprint("Enron" in flagged_companies)`,
+        output: `['Enron', 'WorldCom', 'Tyco']\n['Enron', 'Lehman Brothers', 'Tyco']\nTrue` },
+      { type: "try", content: `Create a list called <code>reviews</code> with 3 short product review strings. Print the second review (remember: index 1!). Then <code>.append()</code> a fourth review and print the whole list.` },
+    ]
+  },
+
+  {
+    id: "loops",
+    title: "Loops",
+    number: 5,
+    nlpConnection: "Processing every review, every word, every document",
+    body: [
+      { type: "text", content: `A <code>for</code> loop lets you run the same code <strong>once for every item</strong> in a collection. In NLP, this is how you process every review in a dataset, every word in a sentence, or every entity in a document. Without loops, you'd have to write separate code for each item — that doesn't scale.` },
+      { type: "code",
+        code: `reviews = ["Great product!", "Terrible quality.", "Worth the price."]\n\nfor review in reviews:\n    print(review)`,
+        output: `Great product!\nTerrible quality.\nWorth the price.` },
+      { type: "concept", content: `The indented block under the <code>for</code> line runs once per item. <code>review</code> is a temporary variable that holds the current item on each pass. You can name it anything — <code>for item in reviews</code> or <code>for r in reviews</code> — but a descriptive name makes code readable.` },
+      { type: "text", content: `You can do <strong>real work</strong> inside a loop — not just printing. Here's a pattern you'll see in the guided lab: processing each item and building a result.` },
+      { type: "code",
+        code: `words = ["The", "Company", "FILED", "for", "Bankruptcy"]\n\nlowered = []\nfor word in words:\n    lowered.append(word.lower())\n\nprint(lowered)`,
+        output: `['the', 'company', 'filed', 'for', 'bankruptcy']` },
+      { type: "text", content: `The <code>range()</code> function generates a sequence of numbers — useful when you need to loop a specific number of times or need the index.` },
+      { type: "code",
+        code: `# Count from 0 to 4\nfor i in range(5):\n    print(i, end=" ")\nprint()\n\n# Loop with index and value\nfruits = ["apple", "banana", "cherry"]\nfor i in range(len(fruits)):\n    print(f"Item {i}: {fruits[i]}")`,
+        output: `0 1 2 3 4 \nItem 0: apple\nItem 1: banana\nItem 2: cherry` },
+      { type: "warning", content: `Don't forget the colon <code>:</code> at the end of the <code>for</code> line, and always indent the body with <strong>4 spaces</strong>. Both are required — missing either one causes a <code>SyntaxError</code> or <code>IndentationError</code>.` },
+      { type: "try", content: `Create a list of 4 numbers: <code>amounts = [100, 250, 75, 500]</code>. Write a loop that prints each amount with a 10% tax added. (Hint: <code>amount * 1.10</code>)` },
+      { type: "mascot", content: `In the guided lab, you'll see <code>for review in reviews:</code> — it loops through every review and analyzes its sentiment. You now understand exactly how that works. Same pattern, just fancier tools inside!` },
+    ]
+  },
+
+  {
+    id: "conditionals",
+    title: "Conditionals",
+    number: 6,
+    nlpConnection: "Classifying sentiment, flagging transactions",
+    body: [
+      { type: "text", content: `Conditionals let your code <strong>make decisions</strong>. The <code>if</code> statement checks a condition — if it's <code>True</code>, the indented code runs. If not, Python skips it. This is the foundation of all classification: is this review positive or negative? Is this transaction suspicious or normal?` },
+      { type: "code",
+        code: `transaction = 15000\n\nif transaction > 10000:\n    print("Flag for review")\nelse:\n    print("Approved")`,
+        output: `Flag for review` },
+      { type: "text", content: `Use <code>elif</code> (short for "else if") when you have more than two options. Python checks each condition top-to-bottom and runs the <strong>first</strong> one that's True.` },
+      { type: "code",
+        code: `score = 0.75\n\nif score > 0.5:\n    label = "Positive"\nelif score < -0.5:\n    label = "Negative"\nelse:\n    label = "Neutral"\n\nprint(label)`,
+        output: `Positive` },
+      { type: "concept", content: `This is exactly how sentiment classification works. VADER gives you a compound score between -1 and 1. Your code uses <code>if/elif/else</code> to convert that number into a human-readable label.` },
+      { type: "text", content: `You can combine conditionals with loops to process and classify a whole dataset:` },
+      { type: "code",
+        code: `amounts = [500, 12000, 3000, 50000, 800]\n\nfor amount in amounts:\n    if amount > 10000:\n        print(f"${amount} — FLAGGED")\n    else:\n        print(f"${amount} — OK")`,
+        output: `$500 — OK\n$12000 — FLAGGED\n$3000 — OK\n$50000 — FLAGGED\n$800 — OK` },
+      { type: "try", content: `Create a list of 5 sentiment scores (numbers between -1.0 and 1.0). Write a loop with <code>if/elif/else</code> that prints "Positive", "Negative", or "Neutral" for each score. Use the same thresholds from the example above.` },
+    ]
+  },
+
+  {
+    id: "functions",
+    title: "Functions",
+    number: 7,
+    nlpConnection: "Writing reusable NLP processing functions",
+    body: [
+      { type: "text", content: `A <strong>function</strong> is a reusable block of code with a name. You <strong>define</strong> it once with <code>def</code>, then <strong>call</strong> it whenever you need it. Every NLP tool you use in the guided lab — <code>word_tokenize()</code>, <code>polarity_scores()</code>, <code>spacy.load()</code> — is a function somebody wrote.` },
+      { type: "code",
+        code: `def greet(name):\n    return "Hello, " + name + "!"\n\nmessage = greet("AI 102")\nprint(message)`,
+        output: `Hello, AI 102!` },
+      { type: "text", content: `The key parts: <code>def</code> starts the definition, <strong>parameters</strong> go in parentheses (they're the inputs), and <code>return</code> sends a result back to whoever called the function. Without <code>return</code>, the function gives back <code>None</code>.` },
+      { type: "concept", content: `<code>return</code> vs <code>print</code>: <code>print()</code> shows text on screen but doesn't save anything. <code>return</code> sends data back so you can store it in a variable. In real code, functions almost always use <code>return</code>.` },
+      { type: "code",
+        code: `def classify_transaction(amount):\n    if amount > 10000:\n        return "Suspicious"\n    else:\n        return "Normal"\n\n# Use the function in a loop\ntransactions = [500, 15000, 3000, 75000]\n\nfor t in transactions:\n    result = classify_transaction(t)\n    print(f"${t} → {result}")`,
+        output: `$500 → Normal\n$15000 → Suspicious\n$3000 → Normal\n$75000 → Suspicious` },
+      { type: "text", content: `Functions can have <strong>default parameters</strong> — values that are used when the caller doesn't provide one:` },
+      { type: "code",
+        code: `def classify_sentiment(score, threshold=0.5):\n    if score > threshold:\n        return "Positive"\n    elif score < -threshold:\n        return "Negative"\n    else:\n        return "Neutral"\n\nprint(classify_sentiment(0.8))\nprint(classify_sentiment(0.3))\nprint(classify_sentiment(0.3, threshold=0.2))`,
+        output: `Positive\nNeutral\nPositive` },
+      { type: "try", content: `Write a function called <code>clean_text</code> that takes a string, strips whitespace, lowercases it, and returns the result. Test it with <code>"  HELLO World!  "</code>.` },
+    ]
+  },
+
+  {
+    id: "dictionaries",
+    title: "Dictionaries",
+    number: 8,
+    nlpConnection: "VADER returns dicts; spaCy entities are dict-like",
+    body: [
+      { type: "text", content: `A <strong>dictionary</strong> stores data as <strong>key-value pairs</strong>. Think of it like a real dictionary: you look up a word (the key) and get its definition (the value). In NLP, dictionaries are everywhere — VADER's <code>polarity_scores()</code> returns a dictionary, spaCy entities have dictionary-like attributes, and word frequency counts are dictionaries.` },
+      { type: "code",
+        code: `# This is what VADER's output looks like\nsentiment = {\n    "neg": 0.0,\n    "neu": 0.328,\n    "pos": 0.672,\n    "compound": 0.6369\n}\n\nprint(sentiment["compound"])\nprint(sentiment["pos"])`,
+        output: `0.6369\n0.672` },
+      { type: "concept", content: `When you run <code>sia.polarity_scores(review)</code> in the guided lab, it returns exactly this kind of dictionary. Now you know how to read it: use the key name in square brackets to get any score.` },
+      { type: "text", content: `You can create dictionaries, add new keys, and change existing values:` },
+      { type: "code",
+        code: `company = {"name": "Enron", "year": 2001}\n\n# Add a new key\ncompany["status"] = "bankrupt"\n\n# Change existing value\ncompany["year"] = 2001\n\nprint(company)\nprint(company["name"])`,
+        output: `{'name': 'Enron', 'year': 2001, 'status': 'bankrupt'}\nEnron` },
+      { type: "text", content: `To loop through a dictionary, use <code>.items()</code> which gives you both the key and value on each pass:` },
+      { type: "code",
+        code: `scores = {"neg": 0.0, "neu": 0.328, "pos": 0.672, "compound": 0.6369}\n\nfor key, value in scores.items():\n    print(f"{key}: {value}")`,
+        output: `neg: 0.0\nneu: 0.328\npos: 0.672\ncompound: 0.6369` },
+      { type: "try", content: `Create a dictionary called <code>word_counts</code> with 4 words as keys and their counts as values (e.g., <code>"fraud": 5</code>). Loop through it with <code>.items()</code> and print each word and count.` },
+      { type: "mascot", content: `When you run <code>sia.polarity_scores(review)</code> in the guided lab, it returns <strong>exactly</strong> this kind of dictionary — with keys like <code>"pos"</code>, <code>"neg"</code>, <code>"neu"</code>, and <code>"compound"</code>. Now you know how to read it, loop through it, and pull out any score you need!` },
+    ]
+  },
+
+  {
+    id: "fstrings",
+    title: "F-Strings & Formatting",
+    number: 9,
+    nlpConnection: "Building readable reports from NLP results",
+    body: [
+      { type: "text", content: `An <strong>f-string</strong> lets you insert variables directly into text by putting <code>f</code> before the quote and variables inside curly braces <code>{}</code>. This is how you build readable output — turning raw data into formatted reports that humans can understand.` },
+      { type: "code",
+        code: `company = "Enron"\nscore = 0.8734\n\n# Without f-string (awkward)\nprint("Company: " + company + " Score: " + str(score))\n\n# With f-string (clean!)\nprint(f"Company: {company} Score: {score}")`,
+        output: `Company: Enron Score: 0.8734\nCompany: Enron Score: 0.8734` },
+      { type: "concept", content: `F-strings are what the guided lab uses in <code>print(f"Review: {review}\\nSentiment: {sentiment}\\n")</code>. The <code>\\n</code> creates a new line. The variables inside <code>{}</code> get replaced with their current values.` },
+      { type: "text", content: `You can put <strong>expressions</strong> inside the curly braces — not just variable names:` },
+      { type: "code",
+        code: `price = 49.99\nqty = 3\n\nprint(f"Total: ${price * qty}")\nprint(f"Uppercase: {'hello'.upper()}")\nprint(f"Type: {type(price).__name__}")`,
+        output: `Total: $149.97\nUppercase: HELLO\nType: float` },
+      { type: "text", content: `For numbers, you can control formatting. This is especially useful for displaying percentages and scores:` },
+      { type: "code",
+        code: `score = 0.87345\n\nprint(f"Raw: {score}")\nprint(f"2 decimals: {score:.2f}")\nprint(f"Percentage: {score:.1%}")`,
+        output: `Raw: 0.87345\n2 decimals: 0.87\nPercentage: 87.3%` },
+      { type: "text", content: `Here's a realistic example — formatting NLP results into a clean report:` },
+      { type: "code",
+        code: `reviews = ["Love it!", "Terrible.", "Pretty good."]\nscores = [0.85, -0.72, 0.45]\n\nfor i in range(len(reviews)):\n    print(f"Review {i+1}: {reviews[i]}")\n    print(f"  Score: {scores[i]:+.2f}\\n")`,
+        output: `Review 1: Love it!\n  Score: +0.85\n\nReview 2: Terrible.\n  Score: -0.72\n\nReview 3: Pretty good.\n  Score: +0.45\n` },
+      { type: "try", content: `Create variables for a company name, a fraud score (float), and a status (string). Use an f-string to print a one-line report like: <code>Enron | Score: 0.94 | Status: FLAGGED</code>.` },
+      { type: "mascot", content: `That's all 9 lessons! You now have every Python building block you need for the guided lab: variables, types, strings, lists, loops, conditionals, functions, dictionaries, and f-strings. Head to the <strong>Challenges</strong> tab to test yourself, or jump into the guided lab — you're ready!` },
+    ]
+  },
+];
+
+
+// ── js/data/challenges.js ──
+/* ==========================================================================
+   data/challenges.js — Challenge content array (pure data, no logic)
+   ========================================================================== */
+
+const CHALLENGES = [
+  // ── Tier 1: Predict ─────────────────────────────────────────────────────
+  {
+    id: "p1", tier: "predict", topic: "Variables",
+    title: "What gets printed?",
+    code: `x = 10\nx = x + 5\nprint(x)`,
+    answers: ["15"],
+    hint: "Python runs line by line. After line 2, x has a new value."
+  },
+  {
+    id: "p2", tier: "predict", topic: "Strings",
+    title: "String indexing",
+    code: `word = "Python"\nprint(word[0])`,
+    answers: ["P"],
+    hint: "Indexing starts at 0, so [0] is the first character."
+  },
+  {
+    id: "p3", tier: "predict", topic: "Lists",
+    title: "How long is it?",
+    code: `items = ["a", "b", "c", "d"]\nprint(len(items))`,
+    answers: ["4"],
+    hint: "len() counts the number of items in the list."
+  },
+  {
+    id: "p4", tier: "predict", topic: "Loops",
+    title: "Loop accumulator",
+    code: `total = 0\nfor n in [1, 2, 3]:\n    total = total + n\nprint(total)`,
+    answers: ["6"],
+    hint: "Trace it: 0+1=1, 1+2=3, 3+3=6."
+  },
+  {
+    id: "p5", tier: "predict", topic: "Conditionals",
+    title: "Which branch runs?",
+    code: `score = 0.3\nif score > 0.5:\n    print("Positive")\nelif score < -0.5:\n    print("Negative")\nelse:\n    print("Neutral")`,
+    answers: ["Neutral"],
+    hint: "0.3 is not > 0.5, and not < -0.5, so the else branch runs."
+  },
+
+  // ── Tier 2: Fix ─────────────────────────────────────────────────────────
+  {
+    id: "f1", tier: "fix", topic: "Variables",
+    title: "Case sensitivity",
+    question: "This code throws a NameError. Fix it so it prints the name.",
+    code: `Name = "Alice"\nprint(name)`,
+    answers: ["Alice"],
+    hint: "Python is case-sensitive. The variable is 'Name' with a capital N."
+  },
+  {
+    id: "f2", tier: "fix", topic: "Types",
+    title: "Type mismatch",
+    question: "This code throws a TypeError. Fix it.",
+    code: `age = "25"\nprint(age + 10)`,
+    answers: ["35"],
+    hint: "age is a string. Convert it to int first."
+  },
+  {
+    id: "f3", tier: "fix", topic: "Loops",
+    title: "Missing colon",
+    question: "This code throws a SyntaxError. Find and fix the bug.",
+    code: `for i in range(3)\n    print(i)`,
+    answers: ["0\n1\n2"],
+    hint: "The for line is missing something at the end..."
+  },
+  {
+    id: "f4", tier: "fix", topic: "Lists",
+    title: "Index out of range",
+    question: "This code crashes. Fix it to print the last item.",
+    code: `colors = ["red", "green", "blue"]\nprint(colors[3])`,
+    answers: ["blue"],
+    hint: "List of 3 items has indices 0, 1, 2. Use index 2, or -1 for the last."
+  },
+
+  // ── Tier 3: Write ───────────────────────────────────────────────────────
+  {
+    id: "w1", tier: "write", topic: "Strings + Loops",
+    title: "Lowercase loop",
+    question: "Write code that lowercases every word in the list and prints the result.",
+    starterCode: `words = ["The", "QUICK", "Brown", "FOX"]\n\n# Your code here\n`,
+    expectedOutput: `['the', 'quick', 'brown', 'fox']`,
+    hint: "Create an empty list, loop through words, append word.lower(), then print."
+  },
+  {
+    id: "w2", tier: "write", topic: "Functions",
+    title: "Double function",
+    question: "Write a function called <code>double</code> that returns a number multiplied by 2. Then print <code>double(7)</code>.",
+    starterCode: `# Write your function here\n\n\nprint(double(7))`,
+    expectedOutput: `14`,
+    hint: "def double(n): return n * 2"
+  },
+  {
+    id: "w3", tier: "write", topic: "Dictionaries",
+    title: "Loop through a dict",
+    question: "Loop through the dictionary and print each key-value pair in the format <code>key: value</code>.",
+    starterCode: `scores = {"pos": 0.6, "neg": 0.1, "neu": 0.3}\n\n# Your code here\n`,
+    expectedOutput: `pos: 0.6\nneg: 0.1\nneu: 0.3`,
+    hint: "Use scores.items() to get both key and value in the loop."
+  },
+
+  // ── Tier 4: NLP Bridge ──────────────────────────────────────────────────
+  {
+    id: "b1", tier: "bridge", topic: "Text → Tokens",
+    title: "Manual tokenizer",
+    question: "Take the sentence, preprocess it (strip, lowercase), then split into words. Print the word list.",
+    starterCode: `sentence = "  The Company FILED for Bankruptcy  "\n\n# Step 1: Strip whitespace\n# Step 2: Lowercase\n# Step 3: Split into words\n# Step 4: Print the result\n`,
+    expectedOutput: `['the', 'company', 'filed', 'for', 'bankruptcy']`,
+    hint: "Chain the methods: sentence.strip().lower().split()"
+  },
+  {
+    id: "b2", tier: "bridge", topic: "Word Frequency",
+    title: "Word counter",
+    question: "Count how many times each word appears and print the dictionary.",
+    starterCode: `words = ["fraud", "alert", "fraud", "review", "alert", "fraud"]\n\ncounts = {}\n# Your code here: loop through words and count each one\n\nprint(counts)`,
+    expectedOutput: `{'fraud': 3, 'alert': 2, 'review': 1}`,
+    hint: "In the loop: if the word is in counts, add 1. Otherwise, set it to 1."
+  },
+];
+
+
+// ── js/data/reference.js ──
+/* ==========================================================================
+   data/reference.js — Reference tab content (pure data, no logic)
+   ========================================================================== */
+
+const REFERENCE = [
+  {
+    icon: "📦",
+    title: "Data Types",
+    items: [
+      { code: `"hello"`, desc: "String (text)" },
+      { code: `42`, desc: "Integer (whole number)" },
+      { code: `3.14`, desc: "Float (decimal)" },
+      { code: `True / False`, desc: "Boolean" },
+      { code: `[1, 2, 3]`, desc: "List (ordered collection)" },
+      { code: `{"k": "v"}`, desc: "Dictionary (key-value pairs)" },
+      { code: `type(x)`, desc: "Check the type of x" },
+    ]
+  },
+  {
+    icon: "✂️",
+    title: "String Methods",
+    items: [
+      { code: `.strip()`, desc: "Remove leading/trailing whitespace" },
+      { code: `.lower()`, desc: "Convert to lowercase" },
+      { code: `.upper()`, desc: "Convert to uppercase" },
+      { code: `.split()`, desc: "Split into list of words" },
+      { code: `.replace(a, b)`, desc: "Replace a with b" },
+      { code: `.startswith(s)`, desc: "True if starts with s" },
+      { code: `.endswith(s)`, desc: "True if ends with s" },
+      { code: `.count(s)`, desc: "Count occurrences of s" },
+      { code: `len(s)`, desc: "Length of string" },
+    ]
+  },
+  {
+    icon: "📋",
+    title: "List Operations",
+    items: [
+      { code: `lst[0]`, desc: "First item (index 0)" },
+      { code: `lst[-1]`, desc: "Last item" },
+      { code: `lst.append(x)`, desc: "Add x to end" },
+      { code: `lst.remove(x)`, desc: "Remove first x" },
+      { code: `len(lst)`, desc: "Number of items" },
+      { code: `x in lst`, desc: "True if x is in list" },
+      { code: `sorted(lst)`, desc: "Return sorted copy" },
+      { code: `lst[1:3]`, desc: "Slice: items at index 1, 2" },
+    ]
+  },
+  {
+    icon: "📖",
+    title: "Dictionary Operations",
+    items: [
+      { code: `d["key"]`, desc: "Get value by key" },
+      { code: `d["key"] = val`, desc: "Set/update a key" },
+      { code: `d.get("key", default)`, desc: "Get with fallback" },
+      { code: `d.keys()`, desc: "All keys" },
+      { code: `d.values()`, desc: "All values" },
+      { code: `d.items()`, desc: "All key-value pairs" },
+      { code: `"key" in d`, desc: "True if key exists" },
+    ]
+  },
+  {
+    icon: "⚖️",
+    title: "Comparison Operators",
+    items: [
+      { code: `==`, desc: "Equal to" },
+      { code: `!=`, desc: "Not equal to" },
+      { code: `>  <`, desc: "Greater / less than" },
+      { code: `>=  <=`, desc: "Greater/less or equal" },
+      { code: `and`, desc: "Both conditions true" },
+      { code: `or`, desc: "Either condition true" },
+      { code: `not`, desc: "Invert a boolean" },
+    ]
+  },
+  {
+    icon: "🧰",
+    title: "Useful Built-ins",
+    items: [
+      { code: `print(x)`, desc: "Display output" },
+      { code: `len(x)`, desc: "Length of collection" },
+      { code: `range(n)`, desc: "Numbers 0 to n-1" },
+      { code: `int(x)`, desc: "Convert to integer" },
+      { code: `str(x)`, desc: "Convert to string" },
+      { code: `float(x)`, desc: "Convert to float" },
+      { code: `input(prompt)`, desc: "Read user input" },
+    ]
+  },
+];
+
+
+// ── js/data/cheatsheet.js ──
+/* ==========================================================================
+   data/cheatsheet.js — Cheat Sheet tab content (pure data, no logic)
+   ========================================================================== */
+
+const CHEATSHEET = [
+  {
+    icon: "📦",
+    title: "Variables & Types",
+    rows: [
+      { code: `name = "Enron"`, desc: "Assign a string" },
+      { code: `count = 42`, desc: "Assign an integer" },
+      { code: `rate = 3.14`, desc: "Assign a float" },
+      { code: `flag = True`, desc: "Assign a boolean" },
+      { code: `type(name)`, desc: "Check type → <class 'str'>" },
+      { code: `int("5")`, desc: "Convert string to integer" },
+      { code: `str(42)`, desc: "Convert integer to string" },
+    ]
+  },
+  {
+    icon: "✂️",
+    title: "Strings",
+    rows: [
+      { code: `text.strip()`, desc: "Remove whitespace edges" },
+      { code: `text.lower()`, desc: "All lowercase" },
+      { code: `text.split()`, desc: "Split into word list" },
+      { code: `text.replace("a","b")`, desc: "Swap a for b" },
+      { code: `text[0]`, desc: "First character" },
+      { code: `len(text)`, desc: "Number of characters" },
+      { code: `"x" in text`, desc: "Check if x is in text" },
+    ]
+  },
+  {
+    icon: "📋",
+    title: "Lists",
+    rows: [
+      { code: `lst = [1, 2, 3]`, desc: "Create a list" },
+      { code: `lst[0]`, desc: "First item" },
+      { code: `lst[-1]`, desc: "Last item" },
+      { code: `lst.append(4)`, desc: "Add to end" },
+      { code: `len(lst)`, desc: "Count items" },
+      { code: `x in lst`, desc: "Check membership" },
+    ]
+  },
+  {
+    icon: "🔄",
+    title: "Control Flow",
+    rows: [
+      { code: `if x > 0:`, desc: "If condition" },
+      { code: `elif x < 0:`, desc: "Else-if" },
+      { code: `else:`, desc: "Otherwise" },
+      { code: `for x in list:`, desc: "Loop through items" },
+      { code: `for i in range(n):`, desc: "Loop n times" },
+      { code: `while x > 0:`, desc: "Loop while true" },
+    ]
+  },
+  {
+    icon: "⚙️",
+    title: "Functions",
+    rows: [
+      { code: `def greet(name):`, desc: "Define a function" },
+      { code: `return value`, desc: "Send back a result" },
+      { code: `greet("AI 102")`, desc: "Call the function" },
+      { code: `def f(x, n=10):`, desc: "Default parameter" },
+    ]
+  },
+  {
+    icon: "📖",
+    title: "Dictionaries & F-Strings",
+    rows: [
+      { code: `d = {"key": "val"}`, desc: "Create a dict" },
+      { code: `d["key"]`, desc: "Get value" },
+      { code: `d["new"] = 1`, desc: "Add/update key" },
+      { code: `for k, v in d.items():`, desc: "Loop key-value" },
+      { code: `f"Hello {name}"`, desc: "F-string" },
+      { code: `f"{score:.2f}"`, desc: "Format 2 decimals" },
+      { code: `f"{score:.1%}"`, desc: "Format as percent" },
+    ]
+  },
+];
+
+
+// ── js/engine.js ──
+/* ==========================================================================
+   engine.js — Python execution engine
+   Depends on: state.js, mascot.js (for error categories)
+   ========================================================================== */
+
+/**
+ * Initialize Skulpt if available, otherwise fall back to basic mode.
+ * Called once from app.js on DOMContentLoaded.
+ */
+function initEngine() {
+  const badge = document.getElementById("engineBadge");
+
+  if (typeof Sk !== "undefined") {
+    try {
+      Sk.configure({
+        __future__: Sk.python3,
+        output: function (text) {
+          AppState.outputBuffer.push(text);
+        },
+        read: function (filename) {
+          if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][filename] === undefined) {
+            throw "File not found: '" + filename + "'";
+          }
+          return Sk.builtinFiles["files"][filename];
+        },
+        inputfun: function (prompt) {
+          return window.prompt(prompt || "Input:");
+        },
+        inputfunTakesPrompt: true,
+        execLimit: ENGINE_TIMEOUT,
+        killableWhile: true,
+        killableFor: true,
+      });
+
+      AppState.engineMode = "skulpt";
+      AppState.engineReady = true;
+      badge.textContent = "⚡ Python Ready";
+      badge.className = "engine-badge ready";
+    } catch (e) {
+      setFallbackMode(badge);
+    }
+  } else {
+    setFallbackMode(badge);
+  }
+}
+
+function setFallbackMode(badge) {
+  AppState.engineMode = "fallback";
+  AppState.engineReady = true;
+  badge.textContent = "⚠️ Basic Mode";
+  badge.className = "engine-badge fallback";
+}
+
+/* ---------------------------------------------------------------------------
+   Run dispatcher — routes to Skulpt or fallback
+   --------------------------------------------------------------------------- */
+
+async function runCode(code) {
+  if (!code.trim()) {
+    Playground.showIdle();
+    return;
+  }
+
+  if (AppState.engineMode === "skulpt") {
+    await runWithSkulpt(code);
+  } else {
+    runWithFallback(code);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Skulpt execution
+   --------------------------------------------------------------------------- */
+
+async function runWithSkulpt(code) {
+  AppState.outputBuffer = [];
+
+  try {
+    const promise = Sk.misceval.asyncToPromise(function () {
+      return Sk.importMainWithBody("<stdin>", false, code, true);
+    });
+    await promise;
+
+    const output = AppState.outputBuffer.join("");
+    if (output.trim().length === 0) {
+      Playground.showNoOutput();
+    } else {
+      Playground.showSuccess(output);
+    }
+  } catch (err) {
+    const errorText = err.toString();
+    Playground.showError(errorText);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Fallback mini-simulator (handles basic print + assignment)
+   --------------------------------------------------------------------------- */
+
+function runWithFallback(code) {
+  const lines = code.split("\n");
+  const vars = {};
+  const output = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    // Handle print()
+    const printMatch = trimmed.match(/^print\((.+)\)$/);
+    if (printMatch) {
+      let arg = printMatch[1].trim();
+
+      // String literal
+      if ((arg.startsWith('"') && arg.endsWith('"')) || (arg.startsWith("'") && arg.endsWith("'"))) {
+        output.push(arg.slice(1, -1));
+      }
+      // Variable reference
+      else if (vars.hasOwnProperty(arg)) {
+        output.push(String(vars[arg]));
+      }
+      // Expression (try eval)
+      else {
+        try {
+          output.push(String(eval(arg)));
+        } catch (e) {
+          output.push(`[Cannot evaluate: ${arg}]`);
+        }
+      }
+      continue;
+    }
+
+    // Handle assignment: x = value
+    const assignMatch = trimmed.match(/^(\w+)\s*=\s*(.+)$/);
+    if (assignMatch) {
+      const name = assignMatch[1];
+      let val = assignMatch[2].trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        vars[name] = val.slice(1, -1);
+      } else if (!isNaN(val)) {
+        vars[name] = Number(val);
+      } else {
+        vars[name] = val;
+      }
+      continue;
+    }
+  }
+
+  if (output.length === 0) {
+    Playground.showNoOutput();
+  } else {
+    Playground.showSuccess(output.join("\n"));
+  }
+}
+
+
+// ── js/playground.js ──
+/* ==========================================================================
+   playground.js — Editor UI + output rendering
+   Depends on: engine.js, mascot.js, utils.js, state.js
+   ========================================================================== */
+
+const Playground = {
+
+  /* -----------------------------------------------------------------------
+     DOM refs (set once in init)
+     ----------------------------------------------------------------------- */
+  editor: null,
+  outputArea: null,
+  btnRun: null,
+  btnClear: null,
+
+  /* -----------------------------------------------------------------------
+     Initialize — bind events
+     ----------------------------------------------------------------------- */
+  init() {
+    this.editor = document.getElementById("codeEditor");
+    this.outputArea = document.getElementById("outputArea");
+    this.btnRun = document.getElementById("btnRun");
+    this.btnClear = document.getElementById("btnClear");
+
+    // Run button
+    this.btnRun.addEventListener("click", () => this.run());
+
+    // Clear button
+    this.btnClear.addEventListener("click", () => this.clear());
+
+    // Tab key inserts 4 spaces instead of moving focus
+    this.editor.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const start = this.editor.selectionStart;
+        const end = this.editor.selectionEnd;
+        this.editor.value =
+          this.editor.value.substring(0, start) +
+          "    " +
+          this.editor.value.substring(end);
+        this.editor.selectionStart = this.editor.selectionEnd = start + 4;
+      }
+      // Ctrl+Enter runs code
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        this.run();
+      }
+    });
+
+    // Show idle state
+    this.showIdle();
+  },
+
+  /* -----------------------------------------------------------------------
+     Actions
+     ----------------------------------------------------------------------- */
+  run() {
+    const code = this.editor.value;
+    runCode(code);
+  },
+
+  clear() {
+    this.editor.value = "";
+    this.showIdle();
+  },
+
+  /**
+   * Load code into editor and optionally run it.
+   */
+  loadCode(code, autoRun = false) {
+    this.editor.value = code;
+    this.editor.scrollTop = 0;
+    if (autoRun) this.run();
+  },
+
+  /* -----------------------------------------------------------------------
+     Output states
+     ----------------------------------------------------------------------- */
+
+  showIdle() {
+    this.outputArea.className = "output-area";
+    this.outputArea.innerHTML =
+      `<div class="playground-idle">` +
+      `<img class="mascot-img" src="${MASCOT_IMG}" alt="PyBuddy">` +
+      `<div class="idle-text">${pickMascot("idle")}</div>` +
+      `</div>`;
+  },
+
+  showSuccess(text) {
+    const lines = text.split("\n");
+    let display = text;
+    let truncated = false;
+
+    if (lines.length > OUTPUT_LINE_CAP) {
+      display = lines.slice(0, OUTPUT_LINE_CAP).join("\n");
+      truncated = true;
+    }
+
+    this.outputArea.className = "output-area output-success";
+    this.outputArea.textContent = display;
+
+    if (truncated) {
+      const notice = document.createElement("div");
+      notice.className = "output-truncated";
+      notice.textContent = `… output truncated (${lines.length} lines, showing first ${OUTPUT_LINE_CAP})`;
+      this.outputArea.appendChild(notice);
+    }
+
+    // Mascot celebration
+    const strip = document.createElement("div");
+    strip.innerHTML = mascotHtml(pickMascot("success"));
+    this.outputArea.appendChild(strip.firstElementChild);
+
+    // Wiggle animation
+    const img = this.outputArea.querySelector(".mascot-img");
+    if (img) {
+      img.classList.add("wiggle");
+      setTimeout(() => img.classList.remove("wiggle"), 600);
+    }
+  },
+
+  showNoOutput() {
+    this.outputArea.className = "output-area";
+    this.outputArea.innerHTML = mascotHtml(pickMascot("noOutput"));
+  },
+
+  showError(errorText) {
+    const category = errorToMascotCategory(errorText);
+    this.outputArea.className = "output-area";
+    this.outputArea.innerHTML =
+      `<span class="output-error">${escapeHtml(errorText)}</span>` +
+      mascotHtml(pickMascot(category));
+  },
+
+  showPlaceholder(message) {
+    this.outputArea.className = "output-area";
+    this.outputArea.innerHTML = mascotHtml(message);
+  },
+};
+
+
+// ── js/renderers/learn.js ──
+/* ==========================================================================
+   renderers/learn.js — Learn tab renderer
+   Depends on: state.js, utils.js, mascot.js, playground.js, data/lessons.js
+   ========================================================================== */
+
+function renderLearn() {
+  const panel = document.getElementById("contentPanel");
+
+  // Mark current lesson as visited
+  AppState.visitedLessons.add(AppState.currentLesson);
+  saveProgress();
+
+  const lesson = LESSONS[AppState.currentLesson];
+  const totalVisited = AppState.visitedLessons.size;
+  const pct = Math.round((totalVisited / LESSONS.length) * 100);
+
+  let html = "";
+
+  /* ── Progress bar ──────────────────────────────────────────────── */
+  html += `
+    <div class="learn-progress">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <span class="progress-label">${totalVisited} of ${LESSONS.length} lessons visited</span>
+    </div>`;
+
+  /* ── Lesson navigation pills ───────────────────────────────────── */
+  html += `<div class="lesson-pills">`;
+  LESSONS.forEach((l, i) => {
+    const active = i === AppState.currentLesson ? "active" : "";
+    const visited = AppState.visitedLessons.has(i) ? "visited" : "";
+    const check = AppState.visitedLessons.has(i) ? " ✓" : "";
+    html += `<button class="pill ${active} ${visited}" onclick="goToLesson(${i})">${l.number}${check}</button>`;
+  });
+  html += `</div>`;
+
+  /* ── Lesson card ───────────────────────────────────────────────── */
+  html += `
+    <div class="lesson-card">
+      <div class="lesson-header">
+        <span class="lesson-number">Lesson ${lesson.number}</span>
+        <h2 class="lesson-title">${lesson.title}</h2>
+        <span class="lesson-connection">🔗 ${lesson.nlpConnection}</span>
+      </div>
+      <div class="lesson-body">`;
+
+  // Render each content block
+  for (const block of lesson.body) {
+    html += renderLessonBlock(block);
+  }
+
+  html += `</div></div>`;
+
+  /* ── Navigation footer ─────────────────────────────────────────── */
+  html += `<div class="lesson-nav">`;
+  if (AppState.currentLesson > 0) {
+    html += `<button class="nav-btn" onclick="goToLesson(${AppState.currentLesson - 1})">← Previous</button>`;
+  } else {
+    html += `<span></span>`;
+  }
+  if (AppState.currentLesson < LESSONS.length - 1) {
+    html += `<button class="nav-btn" onclick="goToLesson(${AppState.currentLesson + 1})">Next →</button>`;
+  } else {
+    html += `<span></span>`;
+  }
+  html += `</div>`;
+
+  panel.innerHTML = html;
+}
+
+/* ---------------------------------------------------------------------------
+   Lesson content block renderer
+   --------------------------------------------------------------------------- */
+
+function renderLessonBlock(block) {
+  switch (block.type) {
+    case "text":
+      return `<p class="lesson-text">${block.content}</p>`;
+
+    case "code":
+      const highlighted = highlightPython(block.code);
+      let codeHtml = `
+        <div class="code-block">
+          <div class="code-header">
+            <span>Python</span>
+            <button class="code-run-btn" onclick="loadAndRun(\`${block.code.replace(/`/g, "\\`")}\`)">Run ▶</button>
+          </div>
+          <pre class="code-content">${highlighted}</pre>`;
+      if (block.output) {
+        codeHtml += `<div class="code-output"><span class="code-output-label">Expected output:</span><pre>${escapeHtml(block.output)}</pre></div>`;
+      }
+      codeHtml += `</div>`;
+      return codeHtml;
+
+    case "concept":
+      return `<div class="callout callout-concept"><span class="callout-label">💡 Concept</span><span class="callout-text">${block.content}</span></div>`;
+
+    case "try":
+      return `<div class="callout callout-try"><span class="callout-label">🧪 Try It</span><span class="callout-text">${block.content}</span></div>`;
+
+    case "warning":
+      return `<div class="callout callout-warning"><span class="callout-label">⚠️ Watch Out</span><span class="callout-text">${block.content}</span></div>`;
+
+    case "mascot":
+      return `<div class="mascot-moment"><img class="mascot-img" src="${MASCOT_IMG}" alt="PyBuddy"><div class="mascot-speech">${block.content}</div></div>`;
+
+    default:
+      return "";
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Navigation helpers (global — called from onclick)
+   --------------------------------------------------------------------------- */
+
+function goToLesson(index) {
+  AppState.currentLesson = index;
+  renderLearn();
+  document.getElementById("contentPanel").scrollTop = 0;
+}
+
+function loadAndRun(code) {
+  Playground.loadCode(code, true);
+}
+
+
+// ── js/renderers/challenges.js ──
+/* ==========================================================================
+   renderers/challenges.js — Challenges tab renderer
+   Depends on: state.js, utils.js, mascot.js, playground.js, data/challenges.js
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Tier config
+   --------------------------------------------------------------------------- */
+const TIER_META = {
+  predict: { icon: "🎯", label: "Predict", color: "var(--accent)" },
+  fix:     { icon: "🔧", label: "Fix",     color: "var(--teal)" },
+  write:   { icon: "✍️",  label: "Write",   color: "var(--green)" },
+  bridge:  { icon: "🧬", label: "NLP Bridge", color: "var(--berry)" },
+};
+
+/* ---------------------------------------------------------------------------
+   Main render — list view or active challenge
+   --------------------------------------------------------------------------- */
+
+function renderChallenges() {
+  const panel = document.getElementById("contentPanel");
+
+  if (AppState.activeChallenge !== null) {
+    renderActiveChallenge(panel);
+    return;
+  }
+
+  const totalCompleted = CHALLENGES.filter(c => AppState.completedChallenges.has(c.id)).length;
+  const pct = Math.round((totalCompleted / CHALLENGES.length) * 100);
+
+  // Coach message based on progress
+  let coachMsg = "Ready to test your Python skills? Pick a challenge and let's go!";
+  if (totalCompleted === CHALLENGES.length) coachMsg = pickMascot("challengeDone");
+  else if (totalCompleted >= Math.ceil(CHALLENGES.length / 2)) coachMsg = pickMascot("challengeHalf");
+  else if (totalCompleted > 1) coachMsg = pickMascot("challengeMid");
+  else if (totalCompleted === 1) coachMsg = pickMascot("challengeFirst");
+
+  // Filter by tier
+  const filtered = AppState.activeTier === "all"
+    ? CHALLENGES
+    : CHALLENGES.filter(c => c.tier === AppState.activeTier);
+
+  let html = "";
+
+  /* ── Coach strip ───────────────────────────────────────────────── */
+  html += `
+    <div class="coach-strip">
+      <img class="mascot-img" src="${MASCOT_IMG}" alt="PyBuddy">
+      <div class="coach-msg">${coachMsg}</div>
+    </div>`;
+
+  /* ── Progress bar ──────────────────────────────────────────────── */
+  html += `
+    <div class="challenge-progress">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <span class="progress-label">${totalCompleted} of ${CHALLENGES.length} completed</span>
+    </div>`;
+
+  /* ── Tier filter ───────────────────────────────────────────────── */
+  html += `<div class="tier-filter">`;
+  const tiers = [
+    { key: "all", label: "All" },
+    { key: "predict", label: "🎯 Predict" },
+    { key: "fix", label: "🔧 Fix" },
+    { key: "write", label: "✍️ Write" },
+    { key: "bridge", label: "🧬 NLP Bridge" },
+  ];
+  for (const t of tiers) {
+    const active = AppState.activeTier === t.key ? "active" : "";
+    html += `<button class="tier-btn ${active}" onclick="setTier('${t.key}')">${t.label}</button>`;
+  }
+  html += `</div>`;
+
+  /* ── Challenge cards ───────────────────────────────────────────── */
+  html += `<div class="challenge-list">`;
+  for (const ch of filtered) {
+    const meta = TIER_META[ch.tier];
+    const done = AppState.completedChallenges.has(ch.id);
+    html += `
+      <button class="challenge-card ${done ? "completed" : ""}" onclick="openChallenge('${ch.id}')">
+        <span class="challenge-tier-icon" style="color:${meta.color}">${meta.icon}</span>
+        <div class="challenge-info">
+          <span class="challenge-title">${ch.title}</span>
+          <span class="challenge-topic">${ch.topic}</span>
+        </div>
+        ${done ? '<span class="challenge-check">✓</span>' : ""}
+      </button>`;
+  }
+  html += `</div>`;
+
+  panel.innerHTML = html;
+}
+
+/* ---------------------------------------------------------------------------
+   Active challenge view
+   --------------------------------------------------------------------------- */
+
+function renderActiveChallenge(panel) {
+  const ch = CHALLENGES.find(c => c.id === AppState.activeChallenge);
+  if (!ch) { AppState.activeChallenge = null; renderChallenges(); return; }
+
+  const meta = TIER_META[ch.tier];
+
+  let html = `
+    <button class="back-btn" onclick="closeChallenge()">← Back to challenges</button>
+    <div class="active-challenge">
+      <span class="active-tier" style="background:${meta.color}">${meta.icon} ${meta.label}</span>
+      <h3 class="active-title">${ch.title}</h3>`;
+
+  // Question text (for fix/write/bridge)
+  if (ch.question) {
+    html += `<p class="active-question">${ch.question}</p>`;
+  }
+
+  // Code block (for predict/fix)
+  if (ch.code) {
+    html += `
+      <div class="code-block">
+        <div class="code-header">
+          <span>Python</span>
+          <button class="code-run-btn" onclick="loadAndRun(\`${ch.code.replace(/`/g, "\\`")}\`)">Run ▶</button>
+        </div>
+        <pre class="code-content">${highlightPython(ch.code)}</pre>
+      </div>`;
+  }
+
+  // Answer input (predict/fix tiers)
+  if (ch.tier === "predict" || ch.tier === "fix") {
+    html += `
+      <div class="answer-section">
+        <label class="answer-label">Your answer:</label>
+        <input type="text" class="answer-input" id="challengeAnswer" placeholder="Type your answer…"
+          onkeydown="if(event.key==='Enter')checkAnswer()">
+        <button class="check-btn" onclick="checkAnswer()">Check</button>
+        <div id="answerResult"></div>
+      </div>`;
+  }
+
+  // Starter code + expected output (write/bridge tiers)
+  if (ch.starterCode) {
+    html += `
+      <button class="starter-btn" onclick="loadChallengeCode()">Load starter code in Playground →</button>`;
+  }
+  if (ch.expectedOutput) {
+    html += `
+      <div class="expected-output">
+        <span class="expected-label">Expected output:</span>
+        <pre>${escapeHtml(ch.expectedOutput)}</pre>
+      </div>`;
+  }
+
+  // Hint
+  if (ch.hint) {
+    html += `
+      <button class="hint-btn" onclick="showChallengeHint()">Show Hint</button>
+      <div id="challengeHint" class="callout callout-try" style="display:none">
+        <span class="callout-label">💡 Hint</span>
+        <span class="callout-text">${ch.hint}</span>
+      </div>`;
+  }
+
+  html += `</div>`;
+  panel.innerHTML = html;
+}
+
+/* ---------------------------------------------------------------------------
+   Challenge actions (global — called from onclick)
+   --------------------------------------------------------------------------- */
+
+function setTier(tier) {
+  AppState.activeTier = tier;
+  renderChallenges();
+}
+
+function openChallenge(id) {
+  AppState.activeChallenge = id;
+  renderChallenges();
+  document.getElementById("contentPanel").scrollTop = 0;
+}
+
+function closeChallenge() {
+  AppState.activeChallenge = null;
+  renderChallenges();
+}
+
+function checkAnswer() {
+  const ch = CHALLENGES.find(c => c.id === AppState.activeChallenge);
+  if (!ch) return;
+
+  const input = document.getElementById("challengeAnswer");
+  const result = document.getElementById("answerResult");
+  const answer = input.value.trim();
+
+  if (!answer) return;
+
+  const correct = ch.answers.some(
+    a => a.trim().toLowerCase() === answer.toLowerCase()
+  );
+
+  if (correct) {
+    result.innerHTML = `<span class="result-correct">✓ Correct!</span>`;
+    AppState.completedChallenges.add(ch.id);
+    saveProgress();
+  } else {
+    result.innerHTML = `<span class="result-wrong">✗ Not quite — try again or use the hint.</span>`;
+  }
+}
+
+function loadChallengeCode() {
+  const ch = CHALLENGES.find(c => c.id === AppState.activeChallenge);
+  if (ch && ch.starterCode) {
+    Playground.loadCode(ch.starterCode, false);
+  }
+}
+
+function showChallengeHint() {
+  const el = document.getElementById("challengeHint");
+  if (el) el.style.display = "block";
+}
+
+
+// ── js/renderers/reference.js ──
+/* ==========================================================================
+   renderers/reference.js — Reference tab renderer
+   Depends on: utils.js, data/reference.js
+   ========================================================================== */
+
+function renderReference() {
+  const panel = document.getElementById("contentPanel");
+
+  let html = `<div class="ref-grid">`;
+
+  for (const cat of REFERENCE) {
+    html += `
+      <div class="ref-card">
+        <div class="ref-card-header">
+          <span class="ref-icon">${cat.icon}</span>
+          <span class="ref-title">${cat.title}</span>
+        </div>
+        <table class="ref-table">`;
+
+    for (const item of cat.items) {
+      html += `
+          <tr>
+            <td class="ref-code"><code>${escapeHtml(item.code)}</code></td>
+            <td class="ref-desc">${item.desc}</td>
+          </tr>`;
+    }
+
+    html += `
+        </table>
+      </div>`;
+  }
+
+  html += `</div>`;
+  panel.innerHTML = html;
+}
+
+
+// ── js/renderers/cheatsheet.js ──
+/* ==========================================================================
+   renderers/cheatsheet.js — Cheat Sheet tab renderer
+   Depends on: utils.js, data/cheatsheet.js
+   ========================================================================== */
+
+function renderCheatSheet() {
+  const panel = document.getElementById("contentPanel");
+
+  let html = `<div class="cheat-sections">`;
+
+  for (const section of CHEATSHEET) {
+    html += `
+      <div class="cheat-section">
+        <h3 class="cheat-section-title">${section.icon} ${section.title}</h3>
+        <div class="cheat-rows">`;
+
+    for (const row of section.rows) {
+      html += `
+          <div class="cheat-row">
+            <code class="cheat-code">${escapeHtml(row.code)}</code>
+            <span class="cheat-desc">${row.desc}</span>
+          </div>`;
+    }
+
+    html += `
+        </div>
+      </div>`;
+  }
+
+  html += `</div>`;
+  panel.innerHTML = html;
+}
+
+
+// ── js/app.js ──
+/* ==========================================================================
+   app.js — Entry point (loads last, wires everything together)
+   Depends on: All other modules
+   ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+  // 1. Restore saved progress
+  loadProgress();
+
+  // 2. Initialize Python engine
+  initEngine();
+
+  // 3. Initialize playground
+  Playground.init();
+
+  // 4. Bind tab buttons
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      switchTab(this.dataset.tab);
+    });
+  });
+
+  // 5. Bind reset button
+  const resetBtn = document.getElementById("btnReset");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", resetProgress);
+  }
+
+  // 6. Render initial tab
+  renderCurrentTab();
+});
+
+/* ---------------------------------------------------------------------------
+   Tab switching
+   --------------------------------------------------------------------------- */
+
+function switchTab(tabName) {
+  AppState.currentTab = tabName;
+
+  // Update active button styling
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.tab === tabName);
+  });
+
+  // Clear active challenge when leaving challenges tab
+  if (tabName !== "challenges") {
+    AppState.activeChallenge = null;
+  }
+
+  renderCurrentTab();
+
+  // Scroll content panel to top
+  document.getElementById("contentPanel").scrollTop = 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Render dispatcher
+   --------------------------------------------------------------------------- */
+
+function renderCurrentTab() {
+  switch (AppState.currentTab) {
+    case "learn":       renderLearn(); break;
+    case "challenges":  renderChallenges(); break;
+    case "reference":   renderReference(); break;
+    case "cheatsheet":  renderCheatSheet(); break;
+  }
+}
+
+
+</script>
 </body>
 </html>
