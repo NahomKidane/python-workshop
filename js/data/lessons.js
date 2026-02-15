@@ -2,30 +2,36 @@
    data/lessons.js — Lesson content array (pure data, no logic)
    ========================================================================== */
 
-const LESSONS = [
+export const LESSONS = [
   {
     id: "variables",
     title: "Variables & Assignment",
     number: 1,
     nlpConnection: "Storing company names, transaction amounts, flags",
     body: [
-      { type: "text", content: `Think of a <strong>variable</strong> as a labeled box where you store a piece of data. You pick the name, Python stores the value. In NLP and fraud detection, we constantly store things — a company name, a transaction amount, a flag for suspicious activity.` },
-      { type: "text", content: `The <code>=</code> sign in Python means <strong>assignment</strong> — "put this value into this box." It does <em>not</em> mean "equals" in the math sense.` },
-      { type: "code",
+      { type: "text", content: `Think of a <strong>variable</strong> as a labeled box where you store a piece of data. You pick the name, Python stores the value. In NLP and fraud detection, we constantly store things: a company name, a transaction amount, a flag for suspicious activity.` },
+      { type: "text", content: `The <code>=</code> sign in Python means <strong>assignment</strong>: "put this value into this box." It does <em>not</em> mean "equals" in the math sense.` },
+      {
+        type: "code",
         code: `company = "Enron"\ntransaction_amount = 45000.00\nis_suspicious = True\n\nprint(company)\nprint(transaction_amount)\nprint(is_suspicious)`,
-        output: `Enron\n45000.0\nTrue` },
+        output: `Enron\n45000.0\nTrue`
+      },
       { type: "concept", content: `Variable names matter! <code>transaction_amount</code> is much clearer than <code>x</code>. In professional code (and in this course), always name variables so a reader instantly knows what data they hold.` },
-      { type: "text", content: `You can <strong>reassign</strong> a variable at any time — the box just gets new contents. The old value is gone.` },
-      { type: "code",
+      { type: "text", content: `You can <strong>reassign</strong> a variable at any time; the box just gets new contents. The old value is gone.` },
+      {
+        type: "code",
         code: `status = "under review"\nprint(status)\n\nstatus = "flagged"\nprint(status)`,
-        output: `under review\nflagged` },
+        output: `under review\nflagged`
+      },
       { type: "text", content: `You can also use one variable to create another. Python evaluates the right side of <code>=</code> first, then stores the result.` },
-      { type: "code",
+      {
+        type: "code",
         code: `base_amount = 1000\ntax = base_amount * 0.08\ntotal = base_amount + tax\n\nprint(total)`,
-        output: `1080.0` },
-      { type: "warning", content: `Python is <strong>case-sensitive</strong>. <code>Name</code>, <code>name</code>, and <code>NAME</code> are three different variables. This is the #1 beginner mistake — if you get a <code>NameError</code>, check your capitalization first!` },
+        output: `1080.0`
+      },
+      { type: "warning", content: `Python is <strong>case-sensitive</strong>. <code>Name</code>, <code>name</code>, and <code>NAME</code> are three different variables. This is the #1 beginner mistake. If you get a <code>NameError</code>, check your capitalization first!` },
       { type: "try", content: `Create a variable called <code>reviewer_name</code> and set it to your name. Then create <code>rating</code> and set it to a number from 1–5. Print both. Then change <code>rating</code> to a different number and print it again.` },
-      { type: "mascot", content: `You just stored your first pieces of data — that's exactly what every NLP tool does behind the scenes. When you see <code>text = "some sentence"</code> in the guided lab, you'll know exactly what's happening!` },
+      { type: "mascot", content: `You just stored your first pieces of data, that's exactly what every NLP tool does behind the scenes. When you see <code>text = "some sentence"</code> in the guided lab, you'll know exactly what's happening!` },
     ]
   },
 
@@ -35,17 +41,21 @@ const LESSONS = [
     number: 2,
     nlpConnection: "Why NLP converts text (str) to numbers (float)",
     body: [
-      { type: "text", content: `Every value in Python has a <strong>type</strong> — it tells Python what kind of data it is and what you can do with it. The four types you'll use most in this course are: <code>str</code> (text), <code>int</code> (whole numbers), <code>float</code> (decimal numbers), and <code>bool</code> (True/False).` },
-      { type: "code",
-        code: `company = "Enron"          # str  — text\nyear = 2001                # int  — whole number\nloss = 74000000000.00      # float — decimal\nfraudulent = True          # bool — True or False\n\nprint(type(company))\nprint(type(year))\nprint(type(loss))\nprint(type(fraudulent))`,
-        output: `<class 'str'>\n<class 'int'>\n<class 'float'>\n<class 'bool'>` },
-      { type: "concept", content: `Why do types matter for NLP? Computers can't do math on text. Sentiment analysis works by converting words (<code>str</code>) into numbers (<code>float</code>) — that's the entire foundation of NLP: turning language into math.` },
+      { type: "text", content: `Every value in Python has a <strong>type</strong>: it tells Python what kind of data it is and what you can do with it. The four types you'll use most in this course are: <code>str</code> (text), <code>int</code> (whole numbers), <code>float</code> (decimal numbers), and <code>bool</code> (True/False).` },
+      {
+        type: "code",
+        code: `company = "Enron"          # str  : text\nyear = 2001                # int  : whole number\nloss = 74000000000.00      # float : decimal\nfraudulent = True          # bool : True or False\n\nprint(type(company))\nprint(type(year))\nprint(type(loss))\nprint(type(fraudulent))`,
+        output: `<class 'str'>\n<class 'int'>\n<class 'float'>\n<class 'bool'>`
+      },
+      { type: "concept", content: `Why do types matter for NLP? Computers can't do math on text. Sentiment analysis works by converting words (<code>str</code>) into numbers (<code>float</code>). That's the entire foundation of NLP: turning language into math.` },
       { type: "text", content: `You can check any value's type with the <code>type()</code> function. And you can <strong>convert</strong> between types using <code>str()</code>, <code>int()</code>, and <code>float()</code>.` },
-      { type: "code",
+      {
+        type: "code",
         code: `score = "85"\nprint(type(score))       # It's a string!\n\nscore_num = int(score)   # Convert to integer\nprint(type(score_num))   # Now it's an int\nprint(score_num + 10)    # Now math works`,
-        output: `<class 'str'>\n<class 'int'>\n95` },
+        output: `<class 'str'>\n<class 'int'>\n95`
+      },
       { type: "warning", content: `You can't add a string and a number directly. <code>"Score: " + 85</code> causes a <code>TypeError</code>. You need <code>"Score: " + str(85)</code>. This comes up constantly when building output messages.` },
-      { type: "try", content: `Create a variable <code>age</code> as a string: <code>age = "22"</code>. Try printing <code>age + 10</code> — what happens? Then convert it to an integer first and try again.` },
+      { type: "try", content: `Create a variable <code>age</code> as a string: <code>age = "22"</code>. Try printing <code>age + 10</code> and see what happens? Then convert it to an integer first and try again.` },
     ]
   },
 
@@ -55,21 +65,27 @@ const LESSONS = [
     number: 3,
     nlpConnection: "Text preprocessing is the first NLP pipeline step",
     body: [
-      { type: "text", content: `Strings are the <strong>most important data type in NLP</strong> — because all language is text. Before any AI model can analyze text, the text needs to be cleaned and standardized. This cleaning process is called <strong>preprocessing</strong>, and Python's built-in string methods are the tools for doing it.` },
-      { type: "code",
+      { type: "text", content: `Strings are the <strong>most important data type in NLP</strong>, because all language is text. Before any AI model can analyze text, the text needs to be cleaned and standardized. This cleaning process is called <strong>preprocessing</strong>, and Python's built-in string methods are the tools for doing it.` },
+      {
+        type: "code",
         code: `message = "  URGENT: Transfer $50,000 NOW!  "\n\n# Remove extra whitespace from both ends\ncleaned = message.strip()\nprint(cleaned)\n\n# Convert to lowercase (standardization)\nlowered = cleaned.lower()\nprint(lowered)`,
-        output: `URGENT: Transfer $50,000 NOW!\nurgent: transfer $50,000 now!` },
+        output: `URGENT: Transfer $50,000 NOW!\nurgent: transfer $50,000 now!`
+      },
       { type: "concept", content: `Why lowercase everything? Because to a computer, "Urgent", "URGENT", and "urgent" are three completely different strings. Lowercasing ensures the word is recognized the same way every time. This is step #1 in nearly every NLP pipeline.` },
-      { type: "text", content: `The <code>.split()</code> method breaks a string into a <strong>list of words</strong> — this is essentially what tokenization does in NLP (you'll use <code>word_tokenize()</code> in the guided lab, which is a smarter version of this).` },
-      { type: "code",
+      { type: "text", content: `The <code>.split()</code> method breaks a string into a <strong>list of words</strong>. This is essentially what tokenization does in NLP (you'll use <code>word_tokenize()</code> in the guided lab, which is a smarter version of this).` },
+      {
+        type: "code",
         code: `sentence = "the company filed for bankruptcy"\nwords = sentence.split()\nprint(words)\nprint(len(words))`,
-        output: `['the', 'company', 'filed', 'for', 'bankruptcy']\n5` },
+        output: `['the', 'company', 'filed', 'for', 'bankruptcy']\n5`
+      },
       { type: "text", content: `Other useful string methods include <code>.replace()</code> to swap text, <code>.startswith()</code> / <code>.endswith()</code> to check beginnings and endings, and <code>.count()</code> to count occurrences.` },
-      { type: "code",
+      {
+        type: "code",
         code: `email = "user@enron.com"\nprint(email.endswith(".com"))    # True\nprint(email.startswith("admin")) # False\n\ntext = "fraud fraud fraud alert"\nprint(text.count("fraud"))       # 3\n\ncleaned = text.replace("fraud", "****")\nprint(cleaned)`,
-        output: `True\nFalse\n3\n**** **** **** alert` },
+        output: `True\nFalse\n3\n**** **** **** alert`
+      },
       { type: "try", content: `Take the string <code>"  Hello, World!  HELLO  "</code>. Strip it, lowercase it, and split it into words. How many words does Python find? Print the result of each step.` },
-      { type: "mascot", content: `You just did <strong>text preprocessing</strong> by hand — strip, lowercase, split. That three-step combo is literally step #1 in every NLP pipeline. The guided lab's <code>word_tokenize()</code> is a fancier version of what you just did with <code>.split()</code>!` },
+      { type: "mascot", content: `You just did <strong>text preprocessing</strong> by hand: strip, lowercase, split. That three-step combo is literally step #1 in every NLP pipeline. The guided lab's <code>word_tokenize()</code> is a fancier version of what you just did with <code>.split()</code>!` },
     ]
   },
 
@@ -80,18 +96,24 @@ const LESSONS = [
     nlpConnection: "Tokenized words are lists; scores are lists",
     body: [
       { type: "text", content: `A <strong>list</strong> is an ordered collection of items. In NLP, lists are everywhere: a tokenized sentence is a list of words, a set of sentiment scores is a list of numbers, a batch of reviews is a list of strings. If you understand lists, you can read most NLP output.` },
-      { type: "code",
+      {
+        type: "code",
         code: `# A list of words (like tokenized output)\ntokens = ["the", "company", "filed", "for", "bankruptcy"]\nprint(tokens)\nprint(len(tokens))`,
-        output: `['the', 'company', 'filed', 'for', 'bankruptcy']\n5` },
+        output: `['the', 'company', 'filed', 'for', 'bankruptcy']\n5`
+      },
       { type: "text", content: `Every item in a list has an <strong>index</strong> — its position number. Python starts counting at <strong>0</strong>, not 1. This trips up every beginner, so let's make it stick:` },
-      { type: "code",
+      {
+        type: "code",
         code: `tokens = ["the", "company", "filed", "for", "bankruptcy"]\n#  index:    0        1        2      3        4\n\nprint(tokens[0])     # First item\nprint(tokens[2])     # Third item\nprint(tokens[-1])    # Last item (negative = from end)`,
-        output: `the\nfiled\nbankruptcy` },
+        output: `the\nfiled\nbankruptcy`
+      },
       { type: "concept", content: `Zero-based indexing is universal in programming, not just Python. When you see <code>tokens[0]</code> in the guided lab, it means "the first token." <code>tokens[-1]</code> means "the last one." These patterns appear in every NLP workflow.` },
       { type: "text", content: `Lists are <strong>mutable</strong> — you can add, remove, and change items after creation.` },
-      { type: "code",
+      {
+        type: "code",
         code: `flagged_companies = ["Enron", "WorldCom"]\n\n# Add to end\nflagged_companies.append("Tyco")\nprint(flagged_companies)\n\n# Change by index\nflagged_companies[1] = "Lehman Brothers"\nprint(flagged_companies)\n\n# Check membership\nprint("Enron" in flagged_companies)`,
-        output: `['Enron', 'WorldCom', 'Tyco']\n['Enron', 'Lehman Brothers', 'Tyco']\nTrue` },
+        output: `['Enron', 'WorldCom', 'Tyco']\n['Enron', 'Lehman Brothers', 'Tyco']\nTrue`
+      },
       { type: "try", content: `Create a list called <code>reviews</code> with 3 short product review strings. Print the second review (remember: index 1!). Then <code>.append()</code> a fourth review and print the whole list.` },
     ]
   },
@@ -103,18 +125,24 @@ const LESSONS = [
     nlpConnection: "Processing every review, every word, every document",
     body: [
       { type: "text", content: `A <code>for</code> loop lets you run the same code <strong>once for every item</strong> in a collection. In NLP, this is how you process every review in a dataset, every word in a sentence, or every entity in a document. Without loops, you'd have to write separate code for each item — that doesn't scale.` },
-      { type: "code",
+      {
+        type: "code",
         code: `reviews = ["Great product!", "Terrible quality.", "Worth the price."]\n\nfor review in reviews:\n    print(review)`,
-        output: `Great product!\nTerrible quality.\nWorth the price.` },
+        output: `Great product!\nTerrible quality.\nWorth the price.`
+      },
       { type: "concept", content: `The indented block under the <code>for</code> line runs once per item. <code>review</code> is a temporary variable that holds the current item on each pass. You can name it anything — <code>for item in reviews</code> or <code>for r in reviews</code> — but a descriptive name makes code readable.` },
       { type: "text", content: `You can do <strong>real work</strong> inside a loop — not just printing. Here's a pattern you'll see in the guided lab: processing each item and building a result.` },
-      { type: "code",
+      {
+        type: "code",
         code: `words = ["The", "Company", "FILED", "for", "Bankruptcy"]\n\nlowered = []\nfor word in words:\n    lowered.append(word.lower())\n\nprint(lowered)`,
-        output: `['the', 'company', 'filed', 'for', 'bankruptcy']` },
+        output: `['the', 'company', 'filed', 'for', 'bankruptcy']`
+      },
       { type: "text", content: `The <code>range()</code> function generates a sequence of numbers — useful when you need to loop a specific number of times or need the index.` },
-      { type: "code",
+      {
+        type: "code",
         code: `# Count from 0 to 4\nfor i in range(5):\n    print(i, end=" ")\nprint()\n\n# Loop with index and value\nfruits = ["apple", "banana", "cherry"]\nfor i in range(len(fruits)):\n    print(f"Item {i}: {fruits[i]}")`,
-        output: `0 1 2 3 4 \nItem 0: apple\nItem 1: banana\nItem 2: cherry` },
+        output: `0 1 2 3 4 \nItem 0: apple\nItem 1: banana\nItem 2: cherry`
+      },
       { type: "warning", content: `Don't forget the colon <code>:</code> at the end of the <code>for</code> line, and always indent the body with <strong>4 spaces</strong>. Both are required — missing either one causes a <code>SyntaxError</code> or <code>IndentationError</code>.` },
       { type: "try", content: `Create a list of 4 numbers: <code>amounts = [100, 250, 75, 500]</code>. Write a loop that prints each amount with a 10% tax added. (Hint: <code>amount * 1.10</code>)` },
       { type: "mascot", content: `In the guided lab, you'll see <code>for review in reviews:</code> — it loops through every review and analyzes its sentiment. You now understand exactly how that works. Same pattern, just fancier tools inside!` },
@@ -128,18 +156,24 @@ const LESSONS = [
     nlpConnection: "Classifying sentiment, flagging transactions",
     body: [
       { type: "text", content: `Conditionals let your code <strong>make decisions</strong>. The <code>if</code> statement checks a condition — if it's <code>True</code>, the indented code runs. If not, Python skips it. This is the foundation of all classification: is this review positive or negative? Is this transaction suspicious or normal?` },
-      { type: "code",
+      {
+        type: "code",
         code: `transaction = 15000\n\nif transaction > 10000:\n    print("Flag for review")\nelse:\n    print("Approved")`,
-        output: `Flag for review` },
+        output: `Flag for review`
+      },
       { type: "text", content: `Use <code>elif</code> (short for "else if") when you have more than two options. Python checks each condition top-to-bottom and runs the <strong>first</strong> one that's True.` },
-      { type: "code",
+      {
+        type: "code",
         code: `score = 0.75\n\nif score > 0.5:\n    label = "Positive"\nelif score < -0.5:\n    label = "Negative"\nelse:\n    label = "Neutral"\n\nprint(label)`,
-        output: `Positive` },
+        output: `Positive`
+      },
       { type: "concept", content: `This is exactly how sentiment classification works. VADER gives you a compound score between -1 and 1. Your code uses <code>if/elif/else</code> to convert that number into a human-readable label.` },
       { type: "text", content: `You can combine conditionals with loops to process and classify a whole dataset:` },
-      { type: "code",
-        code: `amounts = [500, 12000, 3000, 50000, 800]\n\nfor amount in amounts:\n    if amount > 10000:\n        print(f"${amount} — FLAGGED")\n    else:\n        print(f"${amount} — OK")`,
-        output: `$500 — OK\n$12000 — FLAGGED\n$3000 — OK\n$50000 — FLAGGED\n$800 — OK` },
+      {
+        type: "code",
+        code: `amounts = [500, 12000, 3000, 50000, 800]\n\nfor amount in amounts:\n    if amount > 10000:\n        print(f"\\\${amount} — FLAGGED")\n    else:\n        print(f"\\\${amount} — OK")`,
+        output: `$500 — OK\n$12000 — FLAGGED\n$3000 — OK\n$50000 — FLAGGED\n$800 — OK`
+      },
       { type: "try", content: `Create a list of 5 sentiment scores (numbers between -1.0 and 1.0). Write a loop with <code>if/elif/else</code> that prints "Positive", "Negative", or "Neutral" for each score. Use the same thresholds from the example above.` },
     ]
   },
@@ -151,18 +185,24 @@ const LESSONS = [
     nlpConnection: "Writing reusable NLP processing functions",
     body: [
       { type: "text", content: `A <strong>function</strong> is a reusable block of code with a name. You <strong>define</strong> it once with <code>def</code>, then <strong>call</strong> it whenever you need it. Every NLP tool you use in the guided lab — <code>word_tokenize()</code>, <code>polarity_scores()</code>, <code>spacy.load()</code> — is a function somebody wrote.` },
-      { type: "code",
+      {
+        type: "code",
         code: `def greet(name):\n    return "Hello, " + name + "!"\n\nmessage = greet("AI 102")\nprint(message)`,
-        output: `Hello, AI 102!` },
+        output: `Hello, AI 102!`
+      },
       { type: "text", content: `The key parts: <code>def</code> starts the definition, <strong>parameters</strong> go in parentheses (they're the inputs), and <code>return</code> sends a result back to whoever called the function. Without <code>return</code>, the function gives back <code>None</code>.` },
       { type: "concept", content: `<code>return</code> vs <code>print</code>: <code>print()</code> shows text on screen but doesn't save anything. <code>return</code> sends data back so you can store it in a variable. In real code, functions almost always use <code>return</code>.` },
-      { type: "code",
-        code: `def classify_transaction(amount):\n    if amount > 10000:\n        return "Suspicious"\n    else:\n        return "Normal"\n\n# Use the function in a loop\ntransactions = [500, 15000, 3000, 75000]\n\nfor t in transactions:\n    result = classify_transaction(t)\n    print(f"${t} → {result}")`,
-        output: `$500 → Normal\n$15000 → Suspicious\n$3000 → Normal\n$75000 → Suspicious` },
-      { type: "text", content: `Functions can have <strong>default parameters</strong> — values that are used when the caller doesn't provide one:` },
-      { type: "code",
+      {
+        type: "code",
+        code: `def classify_transaction(amount):\n    if amount > 10000:\n        return "Suspicious"\n    else:\n        return "Normal"\n\n# Use the function in a loop\ntransactions = [500, 15000, 3000, 75000]\n\nfor t in transactions:\n    result = classify_transaction(t)\n    print(f"\\\${t} → {result}")`,
+        output: `$500 → Normal\n$15000 → Suspicious\n$3000 → Normal\n$75000 → Suspicious`
+      },
+      { type: "text", content: `Functions can have <strong>default parameters</strong>, values that are used when the caller doesn't provide one:` },
+      {
+        type: "code",
         code: `def classify_sentiment(score, threshold=0.5):\n    if score > threshold:\n        return "Positive"\n    elif score < -threshold:\n        return "Negative"\n    else:\n        return "Neutral"\n\nprint(classify_sentiment(0.8))\nprint(classify_sentiment(0.3))\nprint(classify_sentiment(0.3, threshold=0.2))`,
-        output: `Positive\nNeutral\nPositive` },
+        output: `Positive\nNeutral\nPositive`
+      },
       { type: "try", content: `Write a function called <code>clean_text</code> that takes a string, strips whitespace, lowercases it, and returns the result. Test it with <code>"  HELLO World!  "</code>.` },
     ]
   },
@@ -173,21 +213,27 @@ const LESSONS = [
     number: 8,
     nlpConnection: "VADER returns dicts; spaCy entities are dict-like",
     body: [
-      { type: "text", content: `A <strong>dictionary</strong> stores data as <strong>key-value pairs</strong>. Think of it like a real dictionary: you look up a word (the key) and get its definition (the value). In NLP, dictionaries are everywhere — VADER's <code>polarity_scores()</code> returns a dictionary, spaCy entities have dictionary-like attributes, and word frequency counts are dictionaries.` },
-      { type: "code",
+      { type: "text", content: `A <strong>dictionary</strong> stores data as <strong>key-value pairs</strong>. Think of it like a real dictionary: you look up a word (the key) and get its definition (the value). In NLP, dictionaries are everywhere. VADER's <code>polarity_scores()</code> returns a dictionary, spaCy entities have dictionary-like attributes, and word frequency counts are dictionaries.` },
+      {
+        type: "code",
         code: `# This is what VADER's output looks like\nsentiment = {\n    "neg": 0.0,\n    "neu": 0.328,\n    "pos": 0.672,\n    "compound": 0.6369\n}\n\nprint(sentiment["compound"])\nprint(sentiment["pos"])`,
-        output: `0.6369\n0.672` },
+        output: `0.6369\n0.672`
+      },
       { type: "concept", content: `When you run <code>sia.polarity_scores(review)</code> in the guided lab, it returns exactly this kind of dictionary. Now you know how to read it: use the key name in square brackets to get any score.` },
       { type: "text", content: `You can create dictionaries, add new keys, and change existing values:` },
-      { type: "code",
+      {
+        type: "code",
         code: `company = {"name": "Enron", "year": 2001}\n\n# Add a new key\ncompany["status"] = "bankrupt"\n\n# Change existing value\ncompany["year"] = 2001\n\nprint(company)\nprint(company["name"])`,
-        output: `{'name': 'Enron', 'year': 2001, 'status': 'bankrupt'}\nEnron` },
+        output: `{'name': 'Enron', 'year': 2001, 'status': 'bankrupt'}\nEnron`
+      },
       { type: "text", content: `To loop through a dictionary, use <code>.items()</code> which gives you both the key and value on each pass:` },
-      { type: "code",
+      {
+        type: "code",
         code: `scores = {"neg": 0.0, "neu": 0.328, "pos": 0.672, "compound": 0.6369}\n\nfor key, value in scores.items():\n    print(f"{key}: {value}")`,
-        output: `neg: 0.0\nneu: 0.328\npos: 0.672\ncompound: 0.6369` },
+        output: `neg: 0.0\nneu: 0.328\npos: 0.672\ncompound: 0.6369`
+      },
       { type: "try", content: `Create a dictionary called <code>word_counts</code> with 4 words as keys and their counts as values (e.g., <code>"fraud": 5</code>). Loop through it with <code>.items()</code> and print each word and count.` },
-      { type: "mascot", content: `When you run <code>sia.polarity_scores(review)</code> in the guided lab, it returns <strong>exactly</strong> this kind of dictionary — with keys like <code>"pos"</code>, <code>"neg"</code>, <code>"neu"</code>, and <code>"compound"</code>. Now you know how to read it, loop through it, and pull out any score you need!` },
+      { type: "mascot", content: `When you run <code>sia.polarity_scores(review)</code> in the guided lab, it returns <strong>exactly</strong> this kind of dictionary, with keys like <code>"pos"</code>, <code>"neg"</code>, <code>"neu"</code>, and <code>"compound"</code>. Now you know how to read it, loop through it, and pull out any score you need!` },
     ]
   },
 
@@ -197,25 +243,35 @@ const LESSONS = [
     number: 9,
     nlpConnection: "Building readable reports from NLP results",
     body: [
-      { type: "text", content: `An <strong>f-string</strong> lets you insert variables directly into text by putting <code>f</code> before the quote and variables inside curly braces <code>{}</code>. This is how you build readable output — turning raw data into formatted reports that humans can understand.` },
-      { type: "code",
+      { type: "text", content: `An <strong>f-string</strong> lets you insert variables directly into text by putting <code>f</code> before the quote and variables inside curly braces <code>{}</code>. This is how you build readable output, turning raw data into formatted reports that humans can understand.` },
+      {
+        type: "code",
         code: `company = "Enron"\nscore = 0.8734\n\n# Without f-string (awkward)\nprint("Company: " + company + " Score: " + str(score))\n\n# With f-string (clean!)\nprint(f"Company: {company} Score: {score}")`,
-        output: `Company: Enron Score: 0.8734\nCompany: Enron Score: 0.8734` },
+        output: `Company: Enron Score: 0.8734\nCompany: Enron Score: 0.8734`
+      },
       { type: "concept", content: `F-strings are what the guided lab uses in <code>print(f"Review: {review}\\nSentiment: {sentiment}\\n")</code>. The <code>\\n</code> creates a new line. The variables inside <code>{}</code> get replaced with their current values.` },
       { type: "text", content: `You can put <strong>expressions</strong> inside the curly braces — not just variable names:` },
-      { type: "code",
-        code: `price = 49.99\nqty = 3\n\nprint(f"Total: ${price * qty}")\nprint(f"Uppercase: {'hello'.upper()}")\nprint(f"Type: {type(price).__name__}")`,
-        output: `Total: $149.97\nUppercase: HELLO\nType: float` },
+      {
+        type: "code",
+        code: `price = 49.99\nqty = 3\n\nprint(f"Total: \\\${price * qty}")\nprint(f"Uppercase: {'hello'.upper()}")\nprint(f"Type: {type(price).__name__}")`,
+        output: `Total: $149.97\nUppercase: HELLO\nType: float`
+      },
       { type: "text", content: `For numbers, you can control formatting. This is especially useful for displaying percentages and scores:` },
-      { type: "code",
+      {
+        type: "code",
         code: `score = 0.87345\n\nprint(f"Raw: {score}")\nprint(f"2 decimals: {score:.2f}")\nprint(f"Percentage: {score:.1%}")`,
-        output: `Raw: 0.87345\n2 decimals: 0.87\nPercentage: 87.3%` },
+        output: `Raw: 0.87345\n2 decimals: 0.87\nPercentage: 87.3%`
+      },
       { type: "text", content: `Here's a realistic example — formatting NLP results into a clean report:` },
-      { type: "code",
+      {
+        type: "code",
         code: `reviews = ["Love it!", "Terrible.", "Pretty good."]\nscores = [0.85, -0.72, 0.45]\n\nfor i in range(len(reviews)):\n    print(f"Review {i+1}: {reviews[i]}")\n    print(f"  Score: {scores[i]:+.2f}\\n")`,
-        output: `Review 1: Love it!\n  Score: +0.85\n\nReview 2: Terrible.\n  Score: -0.72\n\nReview 3: Pretty good.\n  Score: +0.45\n` },
+        output: `Review 1: Love it!\n  Score: +0.85\n\nReview 2: Terrible.\n  Score: -0.72\n\nReview 3: Pretty good.\n  Score: +0.45\n`
+      },
       { type: "try", content: `Create variables for a company name, a fraud score (float), and a status (string). Use an f-string to print a one-line report like: <code>Enron | Score: 0.94 | Status: FLAGGED</code>.` },
       { type: "mascot", content: `That's all 9 lessons! You now have every Python building block you need for the guided lab: variables, types, strings, lists, loops, conditionals, functions, dictionaries, and f-strings. Head to the <strong>Challenges</strong> tab to test yourself, or jump into the guided lab — you're ready!` },
     ]
   },
 ];
+
+window.LESSONS = LESSONS;

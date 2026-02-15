@@ -5,7 +5,10 @@
 /**
  * Escape HTML entities to prevent XSS in dynamic content.
  */
-function escapeHtml(str) {
+/**
+ * Escape HTML entities to prevent XSS in dynamic content.
+ */
+export function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
@@ -15,7 +18,7 @@ function escapeHtml(str) {
  * Syntax-highlight Python code for lesson code blocks.
  * Applied to rendered HTML only — NOT the playground editor.
  */
-function highlightPython(code) {
+export function highlightPython(code) {
   let html = escapeHtml(code);
 
   // Comments (must be first to avoid partial matches)

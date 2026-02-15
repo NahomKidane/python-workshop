@@ -3,7 +3,13 @@
    Depends on: state.js, utils.js, mascot.js, playground.js, data/lessons.js
    ========================================================================== */
 
-function renderLearn() {
+import { AppState, saveProgress } from "../state.js";
+import { LESSONS } from "../data/lessons.js";
+import { highlightPython, escapeHtml } from "../utils.js"; // escapeHtml used in renderLessonBlock
+import { MASCOT_IMG } from "../mascot.js";
+import { Playground } from "../playground.js";
+
+export function renderLearn() {
   const panel = document.getElementById("contentPanel");
 
   // Mark current lesson as visited
@@ -80,11 +86,21 @@ function renderLessonBlock(block) {
 
     case "code":
       const highlighted = highlightPython(block.code);
+      // Escape code for HTML attribute:
+      // 1. Backticks ` -> \` (for JS template literal)
+      // 2. Dollar signs $ -> \$ (to prevent JS interpolation)
+      // 3. Double quotes " -> &quot; (to prevent breaking HTML attribute)
+      const safeCode = block.code
+        .replace(/\\/g, "\\\\") // Escape backslashes first!
+        .replace(/`/g, "\\`")
+        .replace(/\$/g, "\\$")
+        .replace(/"/g, "&quot;");
+
       let codeHtml = `
         <div class="code-block">
           <div class="code-header">
             <span>Python</span>
-            <button class="code-run-btn" onclick="loadAndRun(\`${block.code.replace(/`/g, "\\`")}\`)">Run ▶</button>
+            <button class="code-run-btn" onclick="loadAndRun(\`${safeCode}\`)">Run ▶</button>
           </div>
           <pre class="code-content">${highlighted}</pre>`;
       if (block.output) {
@@ -123,3 +139,7 @@ function goToLesson(index) {
 function loadAndRun(code) {
   Playground.loadCode(code, true);
 }
+
+// Expose globals for inline onclick
+window.goToLesson = goToLesson;
+window.loadAndRun = loadAndRun;

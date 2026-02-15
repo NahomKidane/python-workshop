@@ -2,7 +2,7 @@
    mascot.js — PyBuddy mascot system (no dependencies)
    ========================================================================== */
 
-const MASCOT_IMG = "img/mascot.png";
+export const MASCOT_IMG = "img/mascot.png";
 
 /* ---------------------------------------------------------------------------
    Message pools — random selection gives variety across runs
@@ -89,7 +89,7 @@ const MASCOT_MESSAGES = {
 /**
  * Pick a random message from a category pool.
  */
-function pickMascot(category) {
+export function pickMascot(category) {
   const pool = MASCOT_MESSAGES[category] || MASCOT_MESSAGES.genericError;
   return pool[Math.floor(Math.random() * pool.length)];
 }
@@ -97,7 +97,7 @@ function pickMascot(category) {
 /**
  * Generate HTML for the mascot speech-bubble strip (playground/challenges).
  */
-function mascotHtml(message, extraClass) {
+export function mascotHtml(message, extraClass) {
   return (
     `<div class="mascot-strip ${extraClass || ""}">` +
     `<img class="mascot-img" src="${MASCOT_IMG}" alt="PyBuddy">` +
@@ -108,7 +108,7 @@ function mascotHtml(message, extraClass) {
 /**
  * Determine which message category fits a Skulpt error string.
  */
-function errorToMascotCategory(errorText) {
+export function errorToMascotCategory(errorText) {
   if (errorText.includes("NameError")) return "nameError";
   if (errorText.includes("TypeError")) return "typeError";
   if (errorText.includes("IndentationError")) return "indentError";

@@ -3,7 +3,10 @@
    Depends on: utils.js, data/reference.js
    ========================================================================== */
 
-function renderReference() {
+import { REFERENCE } from "../data/reference.js";
+import { escapeHtml } from "../utils.js";
+
+export function renderReference() {
   const panel = document.getElementById("contentPanel");
 
   let html = `<div class="ref-grid">`;

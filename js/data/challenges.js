@@ -2,7 +2,7 @@
    data/challenges.js — Challenge content array (pure data, no logic)
    ========================================================================== */
 
-const CHALLENGES = [
+export const CHALLENGES = [
   // ── Tier 1: Predict ─────────────────────────────────────────────────────
   {
     id: "p1", tier: "predict", topic: "Variables",

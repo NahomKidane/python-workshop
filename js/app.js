@@ -3,6 +3,15 @@
    Depends on: All other modules
    ========================================================================== */
 
+import { AppState, loadProgress, saveProgress, resetProgress } from "./state.js";
+import { initEngine } from "./engine.js";
+import { Playground } from "./playground.js";
+import { renderLearn } from "./renderers/learn.js";
+import { renderChallenges } from "./renderers/challenges.js";
+import { renderReference } from "./renderers/reference.js";
+import { renderCheatSheet } from "./renderers/cheatsheet.js";
+import { renderSandbox, enterSandboxMode, exitSandboxMode } from "./renderers/sandbox.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   // 1. Restore saved progress
   loadProgress();
@@ -14,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
   Playground.init();
 
   // 4. Bind tab buttons
-  document.querySelectorAll(".tab-btn").forEach(function(btn) {
+  document.querySelectorAll(".tab-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
       switchTab(this.dataset.tab);
     });
@@ -22,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 5. Bind reset button
   var resetBtn = document.getElementById("btnReset");
-  if (resetBtn) resetBtn.addEventListener("click", resetProgress);
+  if (resetBtn) resetBtn.addEventListener("click", resetProgress); // resetProgress needs import? yes from state.js
 
   // 6. Theme toggle
   document.getElementById("themeToggle").addEventListener("click", toggleTheme);
@@ -30,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 7. Font size slider
   var slider = document.getElementById("fontSlider");
   slider.value = AppState.fontSize;
-  slider.addEventListener("input", function() {
+  slider.addEventListener("input", function () {
     setFontSize(parseInt(this.value));
   });
 
@@ -58,13 +67,23 @@ function switchTab(tabName) {
   AppState.currentTab = tabName;
 
   // Update active button styling
-  document.querySelectorAll(".tab-btn").forEach(function(btn) {
+  document.querySelectorAll(".tab-btn").forEach(function (btn) {
     btn.classList.toggle("active", btn.dataset.tab === tabName);
   });
 
   // Clear active challenge when leaving challenges tab
   if (tabName !== "challenges") {
     AppState.activeChallenge = null;
+  }
+
+  // Adjust Grid Layout based on tab
+  const main = document.getElementById("mainLayout");
+  if (tabName === "sandbox") {
+    // Sandbox: Content 20%, Playground 80% (rest)
+    main.style.gridTemplateColumns = "20% 6px 1fr";
+  } else {
+    // Others: Content 50%, Playground 50%
+    main.style.gridTemplateColumns = "50% 6px 1fr";
   }
 
   renderCurrentTab();
@@ -83,11 +102,11 @@ function switchTab(tabName) {
 
 function renderCurrentTab() {
   switch (AppState.currentTab) {
-    case "learn":       renderLearn(); break;
-    case "challenges":  renderChallenges(); break;
-    case "reference":   renderReference(); break;
-    case "cheatsheet":  renderCheatSheet(); break;
-    case "sandbox":     renderSandbox(); break;
+    case "learn": renderLearn(); break;
+    case "challenges": renderChallenges(); break;
+    case "reference": renderReference(); break;
+    case "cheatsheet": renderCheatSheet(); break;
+    case "sandbox": renderSandbox(); break;
   }
 }
 

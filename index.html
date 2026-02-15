@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Basics Workshop — AI 102</title>
+  <title>Python Basics Workshop : AI 102</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
 
   <!-- CodeMirror (syntax-highlighted editor) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
 
   <!-- App styles -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=2">
 </head>
 
 <body>
@@ -25,7 +28,7 @@
       <div class="logo-icon">Py</div>
       <div>
         <div class="logo-title">Python Basics Workshop</div>
-        <div class="logo-text">AI 102 — NLP-Based Programming</div>
+        <div class="logo-text">AI 102 : NLP-Based Programming</div>
       </div>
     </div>
 
@@ -64,7 +67,8 @@
       <div class="editor-wrapper" id="editorWrapper"></div>
 
       <div class="output-label">Output</div>
-      <div class="output-area" id="outputArea"></div>
+      <div id="outputConsole" class="output-console"></div>
+      <div id="mascotArea" class="mascot-area"></div>
     </div>
   </div>
 
@@ -91,30 +95,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/python/python.min.js"></script>
 
-  <!-- Core utilities (no dependencies) -->
-  <script src="js/utils.js" defer></script>
-  <script src="js/mascot.js" defer></script>
-  <script src="js/state.js" defer></script>
-
-  <!-- Data (pure content arrays) -->
-  <script src="js/data/lessons.js" defer></script>
-  <script src="js/data/challenges.js" defer></script>
-  <script src="js/data/reference.js" defer></script>
-  <script src="js/data/cheatsheet.js" defer></script>
-
-  <!-- Engine + Playground -->
-  <script src="js/engine.js" defer></script>
-  <script src="js/playground.js" defer></script>
-
-  <!-- Tab renderers -->
-  <script src="js/renderers/learn.js" defer></script>
-  <script src="js/renderers/challenges.js" defer></script>
-  <script src="js/renderers/reference.js" defer></script>
-  <script src="js/renderers/cheatsheet.js" defer></script>
-  <script src="js/renderers/sandbox.js" defer></script>
-
-  <!-- Entry point -->
-  <script src="js/app.js" defer></script>
+  <!-- Core utilities & Modules loaded via app.js -->
+  <script type="module" src="js/app.js"></script>
 
 </body>
+
 </html>

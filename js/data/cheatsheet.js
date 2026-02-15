@@ -2,7 +2,7 @@
    data/cheatsheet.js — Cheat Sheet tab content (pure data, no logic)
    ========================================================================== */
 
-const CHEATSHEET = [
+export const CHEATSHEET = [
   {
     icon: "📦",
     title: "Variables & Types",

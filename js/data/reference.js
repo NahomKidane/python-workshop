@@ -2,7 +2,7 @@
    data/reference.js — Reference tab content (pure data, no logic)
    ========================================================================== */
 
-const REFERENCE = [
+export const REFERENCE = [
   {
     icon: "📦",
     title: "Data Types",

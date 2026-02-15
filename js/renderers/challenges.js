@@ -3,21 +3,27 @@
    Depends on: state.js, utils.js, mascot.js, playground.js, data/challenges.js
    ========================================================================== */
 
+import { AppState, saveProgress } from "../state.js";
+import { CHALLENGES } from "../data/challenges.js";
+import { highlightPython, escapeHtml } from "../utils.js";
+import { MASCOT_IMG, pickMascot } from "../mascot.js";
+import { Playground } from "../playground.js";
+
 /* ---------------------------------------------------------------------------
    Tier config
    --------------------------------------------------------------------------- */
 const TIER_META = {
   predict: { icon: "🎯", label: "Predict", color: "var(--accent)" },
-  fix:     { icon: "🔧", label: "Fix",     color: "var(--teal)" },
-  write:   { icon: "✍️",  label: "Write",   color: "var(--green)" },
-  bridge:  { icon: "🧬", label: "NLP Bridge", color: "var(--berry)" },
+  fix: { icon: "🔧", label: "Fix", color: "var(--teal)" },
+  write: { icon: "✍️", label: "Write", color: "var(--green)" },
+  bridge: { icon: "🧬", label: "NLP Bridge", color: "var(--berry)" },
 };
 
 /* ---------------------------------------------------------------------------
    Main render — list view or active challenge
    --------------------------------------------------------------------------- */
 
-function renderChallenges() {
+export function renderChallenges() {
   const panel = document.getElementById("contentPanel");
 
   if (AppState.activeChallenge !== null) {
@@ -219,3 +225,13 @@ function showChallengeHint() {
   const el = document.getElementById("challengeHint");
   if (el) el.style.display = "block";
 }
+
+// Expose globals for inline onclick
+window.setTier = setTier;
+window.openChallenge = openChallenge;
+window.closeChallenge = closeChallenge;
+window.checkAnswer = checkAnswer;
+window.loadChallengeCode = loadChallengeCode;
+window.showChallengeHint = showChallengeHint;
+// loadAndRun is also needed for the code blocks in challenges
+window.loadAndRun = (code) => Playground.loadCode(code, true);

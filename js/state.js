@@ -7,7 +7,10 @@ const STORAGE_PREFIX = "pyWorkshop_";
 /* ---------------------------------------------------------------------------
    State object — single source of truth
    --------------------------------------------------------------------------- */
-const AppState = {
+/* ---------------------------------------------------------------------------
+   State object — single source of truth
+   --------------------------------------------------------------------------- */
+export const AppState = {
   // Navigation
   currentTab: "learn",
   currentLesson: 0,
@@ -31,14 +34,14 @@ const AppState = {
 /* ---------------------------------------------------------------------------
    Constants
    --------------------------------------------------------------------------- */
-const ENGINE_TIMEOUT = 5000;   // 5 seconds
-const OUTPUT_LINE_CAP = 100;
+export const ENGINE_TIMEOUT = 5000;   // 5 seconds
+export const OUTPUT_LINE_CAP = 100;
 
 /* ---------------------------------------------------------------------------
    Persistence
    --------------------------------------------------------------------------- */
 
-function saveProgress() {
+export function saveProgress() {
   try {
     localStorage.setItem(
       STORAGE_PREFIX + "visited",
@@ -59,7 +62,7 @@ function saveProgress() {
   }
 }
 
-function loadProgress() {
+export function loadProgress() {
   try {
     const visited = localStorage.getItem(STORAGE_PREFIX + "visited");
     const completed = localStorage.getItem(STORAGE_PREFIX + "completed");
@@ -77,7 +80,7 @@ function loadProgress() {
   }
 }
 
-function resetProgress() {
+export function resetProgress() {
   if (!confirm("Reset all progress? This clears visited lessons and completed challenges.")) {
     return;
   }
@@ -90,7 +93,7 @@ function resetProgress() {
     localStorage.removeItem(STORAGE_PREFIX + "visited");
     localStorage.removeItem(STORAGE_PREFIX + "completed");
     localStorage.removeItem(STORAGE_PREFIX + "lastLesson");
-  } catch (e) {}
+  } catch (e) { }
 
   renderCurrentTab();
 }

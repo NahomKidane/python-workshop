@@ -3,7 +3,10 @@
    Depends on: utils.js, data/cheatsheet.js
    ========================================================================== */
 
-function renderCheatSheet() {
+import { CHEATSHEET } from "../data/cheatsheet.js";
+import { escapeHtml } from "../utils.js";
+
+export function renderCheatSheet() {
   const panel = document.getElementById("contentPanel");
 
   let html = `<div class="cheat-sections">`;

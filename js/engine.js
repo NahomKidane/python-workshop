@@ -1,13 +1,16 @@
 /* ==========================================================================
    engine.js — Python execution engine
-   Depends on: state.js, mascot.js (for error categories)
+   Depends on: state.js, playground.js
    ========================================================================== */
+
+import { AppState, ENGINE_TIMEOUT } from "./state.js";
+import { Playground } from "./playground.js";
 
 /**
  * Initialize Skulpt if available, otherwise fall back to basic mode.
  * Called once from app.js on DOMContentLoaded.
  */
-function initEngine() {
+export function initEngine() {
   const badge = document.getElementById("engineBadge");
 
   if (typeof Sk !== "undefined") {
@@ -55,7 +58,7 @@ function setFallbackMode(badge) {
    Run dispatcher — routes to Skulpt or fallback
    --------------------------------------------------------------------------- */
 
-async function runCode(code) {
+export async function runCode(code) {
   if (!code.trim()) {
     Playground.showIdle();
     return;
