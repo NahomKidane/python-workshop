@@ -22,6 +22,10 @@ const AppState = {
   engineMode: "loading",   // "loading" | "skulpt" | "fallback"
   engineReady: false,
   outputBuffer: [],
+
+  // Accessibility
+  theme: "dark",       // "dark" | "light"
+  fontSize: 15,        // base font size in px
 };
 
 /* ---------------------------------------------------------------------------
@@ -48,8 +52,10 @@ function saveProgress() {
       STORAGE_PREFIX + "lastLesson",
       AppState.currentLesson.toString()
     );
+    localStorage.setItem(STORAGE_PREFIX + "theme", AppState.theme);
+    localStorage.setItem(STORAGE_PREFIX + "fontSize", AppState.fontSize.toString());
   } catch (e) {
-    // localStorage unavailable (private browsing, etc.) — fail silently
+    // localStorage unavailable — fail silently
   }
 }
 
@@ -58,10 +64,14 @@ function loadProgress() {
     const visited = localStorage.getItem(STORAGE_PREFIX + "visited");
     const completed = localStorage.getItem(STORAGE_PREFIX + "completed");
     const lastLesson = localStorage.getItem(STORAGE_PREFIX + "lastLesson");
+    const theme = localStorage.getItem(STORAGE_PREFIX + "theme");
+    const fontSize = localStorage.getItem(STORAGE_PREFIX + "fontSize");
 
     if (visited) AppState.visitedLessons = new Set(JSON.parse(visited));
     if (completed) AppState.completedChallenges = new Set(JSON.parse(completed));
     if (lastLesson) AppState.currentLesson = parseInt(lastLesson) || 0;
+    if (theme) AppState.theme = theme;
+    if (fontSize) AppState.fontSize = parseInt(fontSize) || 15;
   } catch (e) {
     // Corrupt or unavailable — start fresh
   }

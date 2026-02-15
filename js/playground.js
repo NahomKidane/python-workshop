@@ -1,122 +1,92 @@
 /* ==========================================================================
-   playground.js — Editor UI + output rendering
+   playground.js — CodeMirror editor + output rendering
    Depends on: engine.js, mascot.js, utils.js, state.js
    ========================================================================== */
 
 const Playground = {
 
-  /* -----------------------------------------------------------------------
-     DOM refs (set once in init)
-     ----------------------------------------------------------------------- */
-  editor: null,
+  editor: null,        // CodeMirror instance
   outputArea: null,
-  btnRun: null,
-  btnClear: null,
 
-  /* -----------------------------------------------------------------------
-     Initialize — bind events
-     ----------------------------------------------------------------------- */
+  /* ───────────────────────────────────────────────────────────────── */
   init() {
-    this.editor = document.getElementById("codeEditor");
     this.outputArea = document.getElementById("outputArea");
-    this.btnRun = document.getElementById("btnRun");
-    this.btnClear = document.getElementById("btnClear");
+    var wrapper = document.getElementById("editorWrapper");
 
-    // Run button
-    this.btnRun.addEventListener("click", () => this.run());
-
-    // Clear button
-    this.btnClear.addEventListener("click", () => this.clear());
-
-    // Tab key inserts 4 spaces instead of moving focus
-    this.editor.addEventListener("keydown", (e) => {
-      if (e.key === "Tab") {
-        e.preventDefault();
-        const start = this.editor.selectionStart;
-        const end = this.editor.selectionEnd;
-        this.editor.value =
-          this.editor.value.substring(0, start) +
-          "    " +
-          this.editor.value.substring(end);
-        this.editor.selectionStart = this.editor.selectionEnd = start + 4;
-      }
-      // Ctrl+Enter runs code
-      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        this.run();
+    // Create CodeMirror editor
+    this.editor = CodeMirror(wrapper, {
+      value: "",
+      mode: "python",
+      theme: "pyworkshop",
+      lineNumbers: true,
+      indentUnit: 4,
+      tabSize: 4,
+      indentWithTabs: false,
+      lineWrapping: true,
+      matchBrackets: true,
+      placeholder: "Type Python code here…",
+      extraKeys: {
+        "Tab": function(cm) {
+          cm.replaceSelection("    ", "end");
+        },
+        "Ctrl-Enter": function() { Playground.run(); },
+        "Cmd-Enter": function() { Playground.run(); },
       }
     });
 
-    // Show idle state
+    // Buttons
+    document.getElementById("btnRun").addEventListener("click", function() { Playground.run(); });
+    document.getElementById("btnClear").addEventListener("click", function() { Playground.clear(); });
+
     this.showIdle();
   },
 
-  /* -----------------------------------------------------------------------
-     Actions
-     ----------------------------------------------------------------------- */
+  /* ── Actions ──────────────────────────────────────────────────── */
   run() {
-    const code = this.editor.value;
-    runCode(code);
+    runCode(this.editor.getValue());
   },
 
   clear() {
-    this.editor.value = "";
+    this.editor.setValue("");
     this.showIdle();
   },
 
-  /**
-   * Load code into editor and optionally run it.
-   */
-  loadCode(code, autoRun = false) {
-    this.editor.value = code;
-    this.editor.scrollTop = 0;
+  loadCode(code, autoRun) {
+    this.editor.setValue(code);
+    this.editor.setCursor(this.editor.lineCount(), 0);
     if (autoRun) this.run();
   },
 
-  /* -----------------------------------------------------------------------
-     Output states
-     ----------------------------------------------------------------------- */
-
+  /* ── Output states ────────────────────────────────────────────── */
   showIdle() {
     this.outputArea.className = "output-area";
     this.outputArea.innerHTML =
-      `<div class="playground-idle">` +
-      `<img class="mascot-img" src="${MASCOT_IMG}" alt="PyBuddy">` +
-      `<div class="idle-text">${pickMascot("idle")}</div>` +
-      `</div>`;
+      '<div class="playground-idle">' +
+      '<img class="mascot-img" src="' + MASCOT_IMG + '" alt="PyBuddy">' +
+      '<div class="idle-text">' + pickMascot("idle") + '</div></div>';
   },
 
   showSuccess(text) {
-    const lines = text.split("\n");
-    let display = text;
-    let truncated = false;
-
+    var lines = text.split("\n");
+    var display = text;
+    var truncated = false;
     if (lines.length > OUTPUT_LINE_CAP) {
       display = lines.slice(0, OUTPUT_LINE_CAP).join("\n");
       truncated = true;
     }
-
     this.outputArea.className = "output-area output-success";
     this.outputArea.textContent = display;
-
     if (truncated) {
-      const notice = document.createElement("div");
+      var notice = document.createElement("div");
       notice.className = "output-truncated";
-      notice.textContent = `… output truncated (${lines.length} lines, showing first ${OUTPUT_LINE_CAP})`;
+      notice.textContent = "… output truncated (" + lines.length + " lines, showing first " + OUTPUT_LINE_CAP + ")";
       this.outputArea.appendChild(notice);
     }
-
-    // Mascot celebration
-    const strip = document.createElement("div");
+    var strip = document.createElement("div");
     strip.innerHTML = mascotHtml(pickMascot("success"));
     this.outputArea.appendChild(strip.firstElementChild);
-
-    // Wiggle animation
-    const img = this.outputArea.querySelector(".mascot-img");
-    if (img) {
-      img.classList.add("wiggle");
-      setTimeout(() => img.classList.remove("wiggle"), 600);
-    }
+    var img = this.outputArea.querySelector(".mascot-img");
+    if (img) { img.classList.add("wiggle"); setTimeout(function(){ img.classList.remove("wiggle"); }, 600); }
   },
 
   showNoOutput() {
@@ -125,10 +95,10 @@ const Playground = {
   },
 
   showError(errorText) {
-    const category = errorToMascotCategory(errorText);
+    var category = errorToMascotCategory(errorText);
     this.outputArea.className = "output-area";
     this.outputArea.innerHTML =
-      `<span class="output-error">${escapeHtml(errorText)}</span>` +
+      '<span class="output-error">' + escapeHtml(errorText) + '</span>' +
       mascotHtml(pickMascot(category));
   },
 
@@ -136,4 +106,11 @@ const Playground = {
     this.outputArea.className = "output-area";
     this.outputArea.innerHTML = mascotHtml(message);
   },
+
+  /** Refresh CodeMirror after layout changes */
+  refresh() {
+    if (this.editor) {
+      setTimeout(function() { Playground.editor.refresh(); }, 10);
+    }
+  }
 };
